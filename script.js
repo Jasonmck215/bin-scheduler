@@ -1,101 +1,177 @@
-// Function to generate the schedule and show it on the calendar
-function generateSchedule() {
-    // Get values for each bin from user input
-    const greenBinDate = document.getElementById('greenBinDate').value;
-    const greenBinRepeat = document.getElementById('greenBinRepeat').value;
-    
-    const blueBinDate = document.getElementById('blueBinDate').value;
-    const blueBinRepeat = document.getElementById('blueBinRepeat').value;
+document.addEventListener('DOMContentLoaded', function () {
+    const generateButton = document.getElementById('generateButton');
+    const greenStartDateInput = document.getElementById('greenStartDate');
+    const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
+    const blueStartDateInput = document.getElementById('blueStartDate');
+    const blueRepeatDaysInput = document.getElementById('blueRepeatDays');
+    const purpleStartDateInput = document.getElementById('purpleStartDate');
+    const purpleRepeatDaysInput = document.getElementById('purpleRepeatDays');
+    const brownStartDateInput = document.getElementById('brownStartDate');
+    const brownRepeatDaysInput = document.getElementById('brownRepeatDays');
+    const greyStartDateInput = document.getElementById('greyStartDate');
+    const greyRepeatDaysInput = document.getElementById('greyRepeatDays');
+    const calendarContainer = document.getElementById('calendar');
 
-    const purpleBinDate = document.getElementById('purpleBinDate').value;
-    const purpleBinRepeat = document.getElementById('purpleBinRepeat').value;
+    let collectionDates = {
+        green: [],
+        blue: [],
+        purple: [],
+        brown: [],
+        grey: []
+    };
 
-    const brownBinDate = document.getElementById('brownBinDate').value;
-    const brownBinRepeat = document.getElementById('brownBinRepeat').value;
+    generateButton.addEventListener('click', function () {
+        // Green Bin
+        const greenStartDate = new Date(greenStartDateInput.value);
+        const greenRepeatDays = parseInt(greenRepeatDaysInput.value);
 
-    const greyBinDate = document.getElementById('greyBinDate').value;
-    const greyBinRepeat = document.getElementById('greyBinRepeat').value;
+        // Blue Bin
+        const blueStartDate = new Date(blueStartDateInput.value);
+        const blueRepeatDays = parseInt(blueRepeatDaysInput.value);
 
-    // Check if all dates and repeats are provided
-    if (!greenBinDate || !blueBinDate || !purpleBinDate || !brownBinDate || !greyBinDate) {
-        alert('Please enter all dates.');
-        return;
+        // Purple Bin
+        const purpleStartDate = new Date(purpleStartDateInput.value);
+        const purpleRepeatDays = parseInt(purpleRepeatDaysInput.value);
+
+        // Brown Bin
+        const brownStartDate = new Date(brownStartDateInput.value);
+        const brownRepeatDays = parseInt(brownRepeatDaysInput.value);
+
+        // Grey Bin
+        const greyStartDate = new Date(greyStartDateInput.value);
+        const greyRepeatDays = parseInt(greyRepeatDaysInput.value);
+
+        // Generate collection dates for all bins
+        collectionDates.green = generateCollectionDates(greenStartDate, greenRepeatDays);
+        collectionDates.blue = generateCollectionDates(blueStartDate, blueRepeatDays);
+        collectionDates.purple = generateCollectionDates(purpleStartDate, purpleRepeatDays);
+        collectionDates.brown = generateCollectionDates(brownStartDate, brownRepeatDays);
+        collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
+
+        generateCalendar();
+    });
+
+    function generateCollectionDates(startDate, repeatDays) {
+        const dates = [];
+        const numOfMonths = 12; // Generate dates for the next 12 months
+        for (let i = 0; i < numOfMonths; i++) {
+            const collectionDate = new Date(startDate);
+            collectionDate.setDate(startDate.getDate() + (i * repeatDays));  // Add repeating days
+
+            // Add each repeated date within this year
+            while (collectionDate.getFullYear() === startDate.getFullYear()) {
+                dates.push(new Date(collectionDate));
+                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
+            }
+        }
+        return dates;
     }
 
-    // Array of bin data
-    const binData = [
-        { name: 'green', date: new Date(greenBinDate), repeat: greenBinRepeat, color: 'green' },
-        { name: 'blue', date: new Date(blueBinDate), repeat: blueBinRepeat, color: 'blue' },
-        { name: 'purple', date: new Date(purpleBinDate), repeat: purpleBinRepeat, color: 'purple' },
-        { name: 'brown', date: new Date(brownBinDate), repeat: brownBinRepeat, color: 'brown' },
-        { name: 'grey', date: new Date(greyBinDate), repeat: greyBinRepeat, color: 'grey' }
-    ];
+    function generateCalendar() {
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
 
-    // Generate the calendar
-    const calendarContainer = document.getElementById('calendarContainer');
-    calendarContainer.innerHTML = '';  // Clear previous calendar if any
+        // Clear the previous calendar
+        calendarContainer.innerHTML = '';
 
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const currentMonth = new Date().getMonth();  // Get current month
-    const currentYear = new Date().getFullYear();  // Get current year
+        // Generate 12 months starting from the current month
+        for (let monthOffset = 0; monthOffset < 12; monthOffset++) {
+            const monthDate = new Date(currentYear, currentMonth + monthOffset, 1);
+            const monthCalendar = createMonthCalendar(monthDate);
+            calendarContainer.appendChild(monthCalendar);
+        }
+    }
 
-    // Create the calendar
-    for (let monthOffset = 0; monthOffset < 12; monthOffset++) {
-        const month = (currentMonth + monthOffset) % 12;
-        const year = currentYear + Math.floor((currentMonth + monthOffset) / 12);
-        
-        // Create month header
-        const monthHeader = document.createElement('div');
-        monthHeader.classList.add('month-header');
-        monthHeader.textContent = `${monthNames[month]} ${year}`;
-        calendarContainer.appendChild(monthHeader);
+    function createMonthCalendar(monthDate) {
+        const monthName = monthDate.toLocaleString('default', { month: 'long' });
+        const year = monthDate.getFullYear();
+        const month = monthDate.getMonth();
 
-        // Create table for the calendar days
-        const table = document.createElement('table');
+        const monthContainer = document.createElement('div');
+        monthContainer.classList.add('month-container');
+
+        const header = document.createElement('div');
+        header.classList.add('month-header');
+        header.textContent = `${monthName} ${year}`;
+        monthContainer.appendChild(header);
+
+        const calendarTable = document.createElement('table');
         const headerRow = document.createElement('tr');
-        const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        // Create header row with days of the week
         daysOfWeek.forEach(day => {
             const th = document.createElement('th');
             th.textContent = day;
             headerRow.appendChild(th);
         });
-        table.appendChild(headerRow);
+        calendarTable.appendChild(headerRow);
 
-        // Determine first day of the month and the number of days in the month
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
 
-        let currentDate = 1;
-        let row = document.createElement('tr');
+        let dayOfWeek = firstDayOfMonth.getDay();
+        let currentDay = 1;
 
-        // Loop through each day of the month and create the table rows
-        for (let i = 0; i < 42; i++) { // 42 cells (6 rows of 7 days)
-            if (i >= firstDay && currentDate <= daysInMonth) {
+        // Generate the calendar days
+        while (currentDay <= lastDayOfMonth.getDate()) {
+            const row = document.createElement('tr');
+
+            // Fill empty spaces for days before the first day of the month
+            for (let i = 0; i < dayOfWeek; i++) {
                 const td = document.createElement('td');
-                td.textContent = currentDate;
-                
-                // Highlight the dates for each bin collection
-                binData.forEach(bin => {
-                    let collectionDate = new Date(bin.date);
-                    collectionDate.setDate(collectionDate.getDate() + bin.repeat * (Math.floor((currentDate - bin.date.getDate()) / bin.repeat)));
+                row.appendChild(td);
+            }
 
-                    if (currentDate === collectionDate.getDate() && month === collectionDate.getMonth() && year === collectionDate.getFullYear()) {
-                        td.classList.add(bin.color);
-                    }
-                });
+            // Add the actual days of the month
+            while (dayOfWeek < 7 && currentDay <= lastDayOfMonth.getDate()) {
+                const td = document.createElement('td');
+                td.textContent = currentDay;
+
+                const currentDate = new Date(year, month, currentDay);
+
+                // Get the bin collection classes for this date
+                const binClasses = getBinClasses(currentDate);
+
+                // Apply a split color if there are multiple bins
+                if (binClasses.length > 0) {
+                    const percentage = 100 / binClasses.length;
+                    const gradient = `linear-gradient(to right, ${binClasses.map((color, index) => `${color} ${index * percentage}% ${(index + 1) * percentage}%`).join(', ')})`;
+                    td.style.background = gradient;
+                }
 
                 row.appendChild(td);
-                currentDate++;
-            } else {
-                row.appendChild(document.createElement('td'));  // Empty cell
+                currentDay++;
+                dayOfWeek++;
             }
 
-            if (i % 7 === 6) { // End of the week
-                table.appendChild(row);
-                row = document.createElement('tr');
-            }
+            // Add the row to the table
+            calendarTable.appendChild(row);
+            dayOfWeek = 0; // Reset the day of the week for the next row
         }
 
-        calendarContainer.appendChild(table);
+        monthContainer.appendChild(calendarTable);
+        return monthContainer;
     }
-}
+
+    function getBinClasses(date) {
+        const binClasses = [];
+
+        // Check each bin's collection dates
+        if (isCollectionDate(date, collectionDates.green)) binClasses.push('green');
+        if (isCollectionDate(date, collectionDates.blue)) binClasses.push('blue');
+        if (isCollectionDate(date, collectionDates.purple)) binClasses.push('purple');
+        if (isCollectionDate(date, collectionDates.brown)) binClasses.push('brown');
+        if (isCollectionDate(date, collectionDates.grey)) binClasses.push('grey');
+
+        return binClasses;
+    }
+
+    function isCollectionDate(date, collectionDates) {
+        return collectionDates.some(collectionDate =>
+            collectionDate.getDate() === date.getDate() &&
+            collectionDate.getMonth() === date.getMonth() &&
+            collectionDate.getFullYear() === date.getFullYear());
+    }
+});
