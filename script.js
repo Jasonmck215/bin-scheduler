@@ -41,12 +41,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateCollectionDates(startDate, repeatDays) {
         const dates = [];
-        const numOfDays = 365; // Generate dates for the next 365 days
-        const collectionDate = new Date(startDate);
+        const currentDate = new Date(startDate);
 
-        while (collectionDate <= new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDate())) {
-            dates.push(new Date(collectionDate));
-            collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
+        while (currentDate <= new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDate())) {
+            dates.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + repeatDays);
         }
 
         return dates;
