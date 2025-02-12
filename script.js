@@ -186,13 +186,20 @@ document.addEventListener('DOMContentLoaded', function () {
         // Combine all collection dates with their bin color
         for (const binColor in collectionDates) {
             collectionDates[binColor].forEach(date => {
-                allDates.push({ date: date.toISOString().split('T')[0], bin: binColor });
+                allDates.push({ date: formatDate(date), bin: binColor });
             });
         }
 
         // Sort dates by date
-        allDates.sort((a, b) => new Date(a.date) - new Date(b.date));
+        allDates.sort((a, b) => new Date(a.date.split('/').reverse().join('-')) - new Date(b.date.split('/').reverse().join('-')));
 
         return allDates;
+    }
+
+    function formatDate(date) {
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
     }
 });
