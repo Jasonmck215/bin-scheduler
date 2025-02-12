@@ -3,33 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Bin Collection Scheduler</title>
+    <title>Green Bin Scheduler</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <h1>Green Bin Collection Scheduler</h1>
         
-        <div class="input-container">
-            <div>
-                <label for="startDate">Select Start Date:</label>
-                <input type="date" id="startDate">
-            </div>
-            <div>
-                <label for="repeatDays">Repeat Every (in days):</label>
-                <input type="number" id="repeatDays" placeholder="Enter number of days" min="1" required>
-            </div>
-        </div>
+        <label for="startDate">Select Start Date:</label>
+        <input type="date" id="startDate">
+
+        <label for="repeatDays">Repeat Every (in days):</label>
+        <input type="number" id="repeatDays" placeholder="e.g. 7">
 
         <button id="generateButton">Show Schedule</button>
 
-        <h2>Upcoming Collection Dates:</h2>
-        <ul id="scheduleList"></ul>
-
-        <h2>Collection Calendar:</h2>
-        <div id="calendar"></div>
+        <div id="calendar"></div> <!-- Calendar will be rendered here -->
     </div>
 
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
 </body>
 </html>
