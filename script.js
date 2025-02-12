@@ -56,18 +56,24 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function generateBinData() {
-        const binData = [];
+        const binData = {};
 
         for (const [color, dates] of Object.entries(collectionDates)) {
             dates.forEach(date => {
-                binData.push({
-                    date: date.toISOString().split('T')[0], // Format date as YYYY-MM-DD
-                    bin: color
-                });
+                const dateString = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
+                if (!binData[dateString]) {
+                    binData[dateString] = [];
+                }
+                binData[dateString].push(color);
             });
         }
 
-        return binData;
+        // Convert binData object to an array of objects and sort by date
+        const sortedBinData = Object.entries(binData)
+            .map(([date, bins]) => ({ date, bins }))
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        return sortedBinData;
     }
 
     function sendBinDataToJsonBin(binData) {
