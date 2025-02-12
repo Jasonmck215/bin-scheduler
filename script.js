@@ -50,8 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         generateCalendar();
 
-        // Convert collectionDates to JSON
-        const jsonData = JSON.stringify(collectionDates);
+        // Convert collectionDates to formatted JSON grouped by date
+        const formattedCollectionDates = formatCollectionDatesByDate(collectionDates);
+        const jsonData = JSON.stringify(formattedCollectionDates);
         console.log(jsonData); // For debugging purposes
 
         // Send JSON data to JSONbin.io
@@ -72,6 +73,30 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         return dates;
+    }
+
+    function formatCollectionDatesByDate(collectionDates) {
+        const dateBins = {};
+
+        for (const binColor in collectionDates) {
+            collectionDates[binColor].forEach(date => {
+                const formattedDate = formatDate(date);
+                if (!dateBins[formattedDate]) {
+                    dateBins[formattedDate] = [];
+                }
+                dateBins[formattedDate].push(binColor);
+            });
+        }
+
+        return dateBins;
+    }
+
+    function formatDate(date) {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 
     function generateCalendar() {
