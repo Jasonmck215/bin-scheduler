@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 'Content-Type': 'application/json',
                 'X-Master-Key': apiKey
             },
-            body: JSON.stringify(binData)
+            body: JSON.stringify({ binData }) // Ensure the data is correctly formatted
         })
         .then(response => {
             if (!response.ok) {
