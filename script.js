@@ -1,118 +1,128 @@
-document.addEventListener("DOMContentLoaded", function () {
-    console.log("Script loaded successfully!");
+document.addEventListener('DOMContentLoaded', function () {
+    const generateButton = document.getElementById('generateButton');
+    const startDateInput = document.getElementById('startDate');
+    const repeatDaysInput = document.getElementById('repeatDays');
+    const scheduleList = document.getElementById('scheduleList');
+    const calendarContainer = document.getElementById('calendar');
 
-    // Listen for the button click
-    let button = document.getElementById("generateButton");
-    button.addEventListener("click", generateSchedule);
-});
+    // Store the collection dates
+    let collectionDates = [];
 
-// Generate the collection schedule and display it
-function generateSchedule() {
-    let startDateInput = document.getElementById("startDate").value;
-    let repeatDays = parseInt(document.getElementById("repeatDays").value);
-    let scheduleList = document.getElementById("scheduleList");
-    let calendarDiv = document.getElementById("calendar");
-    
-    scheduleList.innerHTML = ""; // Clear previous results
-    calendarDiv.innerHTML = "";  // Clear previous calendar
+    generateButton.addEventListener('click', function () {
+        const startDate = new Date(startDateInput.value);
+        const repeatDays = parseInt(repeatDaysInput.value);
 
-    if (!startDateInput || isNaN(repeatDays) || repeatDays <= 0) {
-        alert("Please enter a valid start date and repeat days.");
-        return;
-    }
-
-    let startDate = new Date(startDateInput);
-    let currentDate = new Date();
-    let dates = [];
-
-    // Move to the next collection date in the future
-    while (startDate < currentDate) {
-        startDate.setDate(startDate.getDate() + repeatDays);
-    }
-
-    // Generate the next 5 collection dates
-    for (let i = 0; i < 5; i++) {
-        let newDate = new Date(startDate);
-        dates.push(newDate);
-        startDate.setDate(startDate.getDate() + repeatDays);
-    }
-
-    console.log("Generated Dates:", dates); // Debugging
-    // Display the list of upcoming dates
-    dates.forEach(date => {
-        let listItem = document.createElement("li");
-        listItem.textContent = date.toDateString();
-        scheduleList.appendChild(listItem);
+        if (startDate && repeatDays) {
+            collectionDates = generateCollectionDates(startDate, repeatDays);
+            updateSchedule();
+            generateCalendar();
+        }
     });
 
-    // Generate the calendar view
-    generateCalendar(dates);
-}
-
-// Generate the calendar for the current month and highlight collection dates
-function generateCalendar(collectionDates) {
-    let currentDate = new Date();
-    let currentMonth = currentDate.getMonth();
-    let currentYear = currentDate.getFullYear();
-
-    // Get the first and last day of the month
-    let firstDay = new Date(currentYear, currentMonth, 1);
-    let lastDay = new Date(currentYear, currentMonth + 1, 0);
-
-    // Get the number of days in the month
-    let numDays = lastDay.getDate();
-    
-    // Create the calendar grid
-    let calendarGrid = document.createElement("table");
-    let calendarHeader = document.createElement("thead");
-    let calendarBody = document.createElement("tbody");
-
-    // Days of the week
-    let daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    let headerRow = document.createElement("tr");
-    daysOfWeek.forEach(day => {
-        let headerCell = document.createElement("th");
-        headerCell.textContent = day;
-        headerRow.appendChild(headerCell);
-    });
-    calendarHeader.appendChild(headerRow);
-    
-    // Add calendar grid
-    let row = document.createElement("tr");
-    for (let i = 0; i < firstDay.getDay(); i++) {
-        row.appendChild(document.createElement("td"));
+    function generateCollectionDates(startDate, repeatDays) {
+        const dates = [];
+        for (let i = 0; i < 12; i++) {  // Generate collection dates for 12 months
+            const collectionDate = new Date(startDate);
+            collectionDate.setDate(startDate.getDate() + (i * repeatDays));
+            dates.push(collectionDate);
+        }
+        return dates;
     }
 
-    // Add days of the month
-    for (let day = 1; day <= numDays; day++) {
-        let cell = document.createElement("td");
-        cell.textContent = day;
-
-        // Highlight collection dates
-        let cellDate = new Date(currentYear, currentMonth, day);
+    function updateSchedule() {
+        scheduleList.innerHTML = '';
         collectionDates.forEach(date => {
-            if (cellDate.toDateString() === date.toDateString()) {
-                cell.classList.add("green");  // Highlight with green
-            }
+            const li = document.createElement('li');
+            li.textContent = date.toLocaleDateString();
+            scheduleList.appendChild(li);
         });
+    }
 
-        row.appendChild(cell);
+    function generateCalendar() {
+        const currentDate = new Date();
+        const currentMonth = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
 
-        // Start a new row after every Saturday (7 days)
-        if ((firstDay.getDay() + day) % 7 === 0) {
-            calendarBody.appendChild(row);
-            row = document.createElement("tr");
+        // Clear the previous calendar
+        calendarContainer.innerHTML = '';
+
+        // Generate 12 months
+        for (let monthOffset = 0; monthOffset < 12; monthOffset++) {
+            const monthDate = new Date(currentYear, currentMonth + monthOffset, 1);
+            const monthCalendar = createMonthCalendar(monthDate);
+            calendarContainer.appendChild(monthCalendar);
         }
     }
 
-    // If the last row isn’t filled (incomplete week), add it
-    if (row.children.length > 0) {
-        calendarBody.appendChild(row);
+    function createMonthCalendar(monthDate) {
+        const monthName = monthDate.toLocaleString('default', { month: 'long' });
+        const year = monthDate.getFullYear();
+        const month = monthDate.getMonth();
+
+        const monthContainer = document.createElement('div');
+        monthContainer.classList.add('month-container');
+
+        const header = document.createElement('div');
+        header.classList.add('month-header');
+        header.textContent = `${monthName} ${year}`;
+        monthContainer.appendChild(header);
+
+        const calendarTable = document.createElement('table');
+        const headerRow = document.createElement('tr');
+        const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        // Create header row with days of the week
+        daysOfWeek.forEach(day => {
+            const th = document.createElement('th');
+            th.textContent = day;
+            headerRow.appendChild(th);
+        });
+        calendarTable.appendChild(headerRow);
+
+        const firstDayOfMonth = new Date(year, month, 1);
+        const lastDayOfMonth = new Date(year, month + 1, 0);
+
+        let dayOfWeek = firstDayOfMonth.getDay();
+        let currentDay = 1;
+
+        while (currentDay <= lastDayOfMonth.getDate()) {
+            const row = document.createElement('tr');
+
+            // Fill empty spaces for days before the first day of the month
+            for (let i = 0; i < dayOfWeek; i++) {
+                const td = document.createElement('td');
+                row.appendChild(td);
+            }
+
+            // Add the actual days of the month
+            while (dayOfWeek < 7 && currentDay <= lastDayOfMonth.getDate()) {
+                const td = document.createElement('td');
+                td.textContent = currentDay;
+
+                const currentDate = new Date(year, month, currentDay);
+                if (isCollectionDate(currentDate)) {
+                    td.classList.add('green');
+                }
+
+                row.appendChild(td);
+                currentDay++;
+                dayOfWeek++;
+            }
+
+            // Add the row to the table
+            calendarTable.appendChild(row);
+            dayOfWeek = 0; // Reset the day of the week for the next row
+        }
+
+        monthContainer.appendChild(calendarTable);
+        return monthContainer;
     }
 
-    calendarGrid.appendChild(calendarHeader);
-    calendarGrid.appendChild(calendarBody);
-    
-    // Add the calendar grid to the page
-    document.getElementById("calendar").appendChild(calendarGrid);
-}
+    function isCollectionDate(date) {
+        // Check if the date is one of the collection dates
+        return collectionDates.some(collectionDate => 
+            collectionDate.getDate() === date.getDate() &&
+            collectionDate.getMonth() === date.getMonth() &&
+            collectionDate.getFullYear() === date.getFullYear());
+    }
+});
