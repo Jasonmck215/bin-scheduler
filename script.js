@@ -82,10 +82,15 @@ document.addEventListener('DOMContentLoaded', function () {
             collectionDates[binColor].forEach(date => {
                 const formattedDate = formatDate(date);
                 if (!dateBins[formattedDate]) {
-                    dateBins[formattedDate] = [];
+                    dateBins[formattedDate] = new Set();
                 }
-                dateBins[formattedDate].push(binColor);
+                dateBins[formattedDate].add(binColor); // Use Set to avoid duplicates
             });
+        }
+
+        // Convert Set to Array for final output
+        for (const date in dateBins) {
+            dateBins[date] = Array.from(dateBins[date]);
         }
 
         return dateBins;
@@ -208,8 +213,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function sendJsonToJsonbin(jsonData) {
-        const apiKey = '$2a$10$am33dKwbEV2.NEe9c6OVmOjvbbASzTBAPvNjkA76aipnMW7HUHoea'; // Replace with your JSONbin API key
-        const binId = '67acf1f7acd3cb34a8df62e3'; // Replace with your JSONbin bin ID
+        const apiKey = 'YOUR_JSONBIN_API_KEY'; // Replace with your JSONbin API key
+        const binId = 'YOUR_JSONBIN_BIN_ID'; // Replace with your JSONbin bin ID
         const endpoint = `https://api.jsonbin.io/v3/b/${binId}`; // JSONbin endpoint URL for updating a bin
 
         try {
