@@ -78,10 +78,10 @@
 
         // Function to save data to GitHub
         function saveToGitHub(data) {
-            const token = 'YOUR_GITHUB_TOKEN';  // Replace with your GitHub personal access token
-            const repoOwner = 'YOUR_GITHUB_USERNAME';
-            const repoName = 'YOUR_REPOSITORY_NAME';
-            const filePath = 'path/to/your/output/file.json'; // Path where the file will be saved
+            const token = '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';  // Replace with your GitHub personal access token
+            const repoOwner = 'Jasonmck215';
+            const repoName = 'bin-scheduler';
+            const filePath = 'bins.json'; // Path where the file will be saved
 
             // Get the current file content (if any) from GitHub
             fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
