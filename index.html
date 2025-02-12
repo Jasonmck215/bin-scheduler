@@ -3,68 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bin Collection Scheduler</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Bin Collection Calendar</title>
 </head>
 <body>
-    <div class="container">
-        <h1>Bin Collection Scheduler</h1>
+    <h1>Bin Collection Calendar Generator</h1>
+    
+    <!-- Input fields for bin collection dates -->
+    <label for="greenStartDate">Green Bin Start Date:</label>
+    <input type="date" id="greenStartDate"><br><br>
 
-        <!-- Green Bin -->
-        <h2>Green Bin</h2>
-        <div class="bin-selection">
-            <img src="greenBin.gif" alt="Green Bin" class="bin-image">
-            <label for="greenStartDate">Start Date:</label>
-            <input type="date" id="greenStartDate">
-            <label for="greenRepeatDays">Repeat (Days):</label>
-            <input type="number" id="greenRepeatDays" value="14">
-        </div>
+    <label for="greenRepeatDays">Green Bin Repeat Days:</label>
+    <input type="number" id="greenRepeatDays"><br><br>
 
-        <!-- Blue Bin -->
-        <h2>Blue Bin</h2>
-        <div class="bin-selection">
-            <img src="blueBin.gif" alt="Blue Bin" class="bin-image">
-            <label for="blueStartDate">Start Date:</label>
-            <input type="date" id="blueStartDate">
-            <label for="blueRepeatDays">Repeat (Days):</label>
-            <input type="number" id="blueRepeatDays" value="14">
-        </div>
+    <label for="blueStartDate">Blue Bin Start Date:</label>
+    <input type="date" id="blueStartDate"><br><br>
 
-        <!-- Purple Bin -->
-        <h2>Purple Bin</h2>
-        <div class="bin-selection">
-            <img src="purpleBin.gif" alt="Purple Bin" class="bin-image">
-            <label for="purpleStartDate">Start Date:</label>
-            <input type="date" id="purpleStartDate">
-            <label for="purpleRepeatDays">Repeat (Days):</label>
-            <input type="number" id="purpleRepeatDays" value="14">
-        </div>
+    <label for="blueRepeatDays">Blue Bin Repeat Days:</label>
+    <input type="number" id="blueRepeatDays"><br><br>
 
-        <!-- Brown Bin -->
-        <h2>Brown Bin</h2>
-        <div class="bin-selection">
-            <img src="brownBin.gif" alt="Brown Bin" class="bin-image">
-            <label for="brownStartDate">Start Date:</label>
-            <input type="date" id="brownStartDate">
-            <label for="brownRepeatDays">Repeat (Days):</label>
-            <input type="number" id="brownRepeatDays" value="14">
-        </div>
+    <label for="purpleStartDate">Purple Bin Start Date:</label>
+    <input type="date" id="purpleStartDate"><br><br>
 
-        <!-- Grey Bin -->
-        <h2>Grey Bin</h2>
-        <div class="bin-selection">
-            <img src="greyBin.png" alt="Grey Bin" class="bin-image">
-            <label for="greyStartDate">Start Date:</label>
-            <input type="date" id="greyStartDate">
-            <label for="greyRepeatDays">Repeat (Days):</label>
-            <input type="number" id="greyRepeatDays" value="14">
-        </div>
+    <label for="purpleRepeatDays">Purple Bin Repeat Days:</label>
+    <input type="number" id="purpleRepeatDays"><br><br>
 
-        <button id="generateButton">Show Schedule</button>
+    <label for="brownStartDate">Brown Bin Start Date:</label>
+    <input type="date" id="brownStartDate"><br><br>
 
-        <div id="calendar"></div>
-    </div>
+    <label for="brownRepeatDays">Brown Bin Repeat Days:</label>
+    <input type="number" id="brownRepeatDays"><br><br>
 
-    <script src="script.js"></script>
+    <label for="greyStartDate">Grey Bin Start Date:</label>
+    <input type="date" id="greyStartDate"><br><br>
+
+    <label for="greyRepeatDays">Grey Bin Repeat Days:</label>
+    <input type="number" id="greyRepeatDays"><br><br>
+
+    <button id="generateButton">Generate Calendar</button>
+
+    <script>
+        // Get references to the input elements
+        const greenStartDateInput = document.getElementById('greenStartDate');
+        const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
+        const blueStartDateInput = document.getElementById('blueStartDate');
+        const blueRepeatDaysInput = document.getElementById('blueRepeatDays');
+        const purpleStartDateInput = document.getElementById('purpleStartDate');
+        const purpleRepeatDaysInput = document.getElementById('purpleRepeatDays');
+        const brownStartDateInput = document.getElementById('brownStartDate');
+        const brownRepeatDaysInput = document.getElementById('brownRepeatDays');
+        const greyStartDateInput = document.getElementById('greyStartDate');
+        const greyRepeatDaysInput = document.getElementById('greyRepeatDays');
+        const generateButton = document.getElementById('generateButton');
+        
+        const collectionDates = {
+            green: [],
+            blue: [],
+            purple: [],
+            brown: [],
+            grey: []
+        };
+
+        // Function to generate collection dates based on the start date and repeat days
+        function generateCollectionDates(startDate, repeatDays) {
+            const dates = [];
+            let currentDate = new Date(startDate);
+
+            while (currentDate <= new Date()) {  // Generate dates until today
+                dates.push(currentDate.toISOString().split('T')[0]);  // Save the date in YYYY-MM-DD format
+                currentDate.setDate(currentDate.getDate() + repeatDays);  // Increment by repeatDays
+            }
+
+            return dates;
+        }
+
+        // Function to save data to GitHub
+        function saveToGitHub(data) {
+            const token = 'YOUR_GITHUB_TOKEN';  // Replace with your GitHub personal access token
+            const repoOwner = 'YOUR_GITHUB_USERNAME';
+            const repoName = 'YOUR_REPOSITORY_NAME';
+            const filePath = 'path/to/your/output/file.json'; // Path where the file will be saved
+
+            // Get the current file content (if any) from GitHub
+            fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `token ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(fileData => {
+                let sha = fileData.sha;  // Existing file's SHA (if exists)
+
+                // Prepare the data
+                const jsonData = JSON.stringify(data, null, 2); // Pretty-print the JSON
+
+                // Send a request to update or create the file
+                return fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Add/update bin collection dates',
+                        content: btoa(jsonData),  // Convert JSON data to base64
+                        sha: sha // If the file exists, provide the SHA to update it
+                    })
+                });
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('File saved to GitHub:', data);
+            })
+            .catch(error => {
+                console.error('Error saving file to GitHub:', error);
+            });
+        }
+
+        // Event listener for the generate button
+        generateButton.addEventListener('click', function () {
+            // Collect all bin dates here as before
+            const greenStartDate = new Date(greenStartDateInput.value);
+            const greenRepeatDays = parseInt(greenRepeatDaysInput.value);
+
+            const blueStartDate = new Date(blueStartDateInput.value);
+            const blueRepeatDays = parseInt(blueRepeatDaysInput.value);
+
+            const purpleStartDate = new Date(purpleStartDateInput.value);
+            const purpleRepeatDays = parseInt(purpleRepeatDaysInput.value);
+
+            const brownStartDate = new Date(brownStartDateInput.value);
+            const brownRepeatDays = parseInt(brownRepeatDaysInput.value);
+
+            const greyStartDate = new Date(greyStartDateInput.value);
+            const greyRepeatDays = parseInt(greyRepeatDaysInput.value);
+
+            // Generate collection dates for all bins
+            collectionDates.green = generateCollectionDates(greenStartDate, greenRepeatDays);
+            collectionDates.blue = generateCollectionDates(blueStartDate, blueRepeatDays);
+            collectionDates.purple = generateCollectionDates(purpleStartDate, purpleRepeatDays);
+            collectionDates.brown = generateCollectionDates(brownStartDate, brownRepeatDays);
+            collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
+
+            // Format the collection data into a JSON object
+            const collectionData = {
+                green: collectionDates.green,
+                blue: collectionDates.blue,
+                purple: collectionDates.purple,
+                brown: collectionDates.brown,
+                grey: collectionDates.grey
+            };
+
+            // Call the function to save the data to GitHub
+            saveToGitHub(collectionData);
+
+            // Here you can add logic to generate the calendar and display it to the user
+            console.log(collectionData);  // For debugging, you can remove this line later
+        });
+    </script>
 </body>
 </html>
