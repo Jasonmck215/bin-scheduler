@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateButton = document.getElementById('generateButton');
-    const updateButton = document.getElementById('updateButton');
     const greenStartDateInput = document.getElementById('greenStartDate');
     const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
     const blueStartDateInput = document.getElementById('blueStartDate');
@@ -22,85 +21,50 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     generateButton.addEventListener('click', function () {
+        // Green Bin
+        const greenStartDate = new Date(greenStartDateInput.value);
+        const greenRepeatDays = parseInt(greenRepeatDaysInput.value);
+
+        // Blue Bin
+        const blueStartDate = new Date(blueStartDateInput.value);
+        const blueRepeatDays = parseInt(blueRepeatDaysInput.value);
+
+        // Purple Bin
+        const purpleStartDate = new Date(purpleStartDateInput.value);
+        const purpleRepeatDays = parseInt(purpleRepeatDaysInput.value);
+
+        // Brown Bin
+        const brownStartDate = new Date(brownStartDateInput.value);
+        const brownRepeatDays = parseInt(brownRepeatDaysInput.value);
+
+        // Grey Bin
+        const greyStartDate = new Date(greyStartDateInput.value);
+        const greyRepeatDays = parseInt(greyRepeatDaysInput.value);
+
         // Generate collection dates for all bins
-        collectionDates.green = generateCollectionDates(new Date(greenStartDateInput.value), parseInt(greenRepeatDaysInput.value));
-        collectionDates.blue = generateCollectionDates(new Date(blueStartDateInput.value), parseInt(blueRepeatDaysInput.value));
-        collectionDates.purple = generateCollectionDates(new Date(purpleStartDateInput.value), parseInt(purpleRepeatDaysInput.value));
-        collectionDates.brown = generateCollectionDates(new Date(brownStartDateInput.value), parseInt(brownRepeatDaysInput.value));
-        collectionDates.grey = generateCollectionDates(new Date(greyStartDateInput.value), parseInt(greyRepeatDaysInput.value));
+        collectionDates.green = generateCollectionDates(greenStartDate, greenRepeatDays);
+        collectionDates.blue = generateCollectionDates(blueStartDate, blueRepeatDays);
+        collectionDates.purple = generateCollectionDates(purpleStartDate, purpleRepeatDays);
+        collectionDates.brown = generateCollectionDates(brownStartDate, brownRepeatDays);
+        collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
 
         generateCalendar();
     });
 
-    updateButton.addEventListener('click', function () {
-        console.log('Update button clicked');
-        const binData = generateBinData();
-        console.log('Generated bin data:', JSON.stringify(binData, null, 2));
-        sendBinDataToJsonBin(binData);
-    });
-
     function generateCollectionDates(startDate, repeatDays) {
         const dates = [];
-        const currentDate = new Date(startDate);
+        const numOfMonths = 12; // Generate dates for the next 12 months
+        for (let i = 0; i < numOfMonths; i++) {
+            const collectionDate = new Date(startDate);
+            collectionDate.setDate(startDate.getDate() + (i * repeatDays));  // Add repeating days
 
-        while (currentDate <= new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDate())) {
-            dates.push(new Date(currentDate));
-            currentDate.setDate(currentDate.getDate() + repeatDays);
-        }
-
-        return dates;
-    }
-
-    function generateBinData() {
-        const binData = {};
-
-        for (const [color, dates] of Object.entries(collectionDates)) {
-            dates.forEach(date => {
-                const dateString = date.toISOString().split('T')[0]; // Format date as YYYY-MM-DD
-                if (!binData[dateString]) {
-                    binData[dateString] = new Set();
-                }
-                binData[dateString].add(color);
-            });
-        }
-
-        // Convert binData object to an array of objects and sort by date
-        const sortedBinData = Object.entries(binData)
-            .map(([date, bins]) => ({
-                date,
-                bins: Array.from(bins).join(', ')  // Convert Set to array and join
-            }))
-            .sort((a, b) => new Date(a.date) - new Date(b.date));
-
-        return sortedBinData;
-    }
-
-    function sendBinDataToJsonBin(binData) {
-        const apiKey = 'YOUR_JSONBIN_API_KEY'; // Replace with your actual jsonbin.io API key
-        const binId = 'YOUR_BIN_ID'; // Replace with your actual bin ID
-
-        fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Master-Key': apiKey
-            },
-            body: JSON.stringify(binData) // Ensure the data is correctly formatted
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            // Add each repeated date within this year
+            while (collectionDate.getFullYear() === startDate.getFullYear()) {
+                dates.push(new Date(collectionDate));
+                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Bin data updated successfully:', data);
-            alert('Bin data updated successfully!');
-        })
-        .catch(error => {
-            console.error('Error updating bin data:', error);
-            alert('Error updating bin data. Check console for details.');
-        });
+        }
+        return dates;
     }
 
     function generateCalendar() {
