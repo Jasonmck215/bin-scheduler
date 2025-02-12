@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateButton = document.getElementById('generateButton');
-    const generateJsonButton = document.getElementById('generateJsonButton');
     const greenStartDateInput = document.getElementById('greenStartDate');
     const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
     const blueStartDateInput = document.getElementById('blueStartDate');
@@ -50,12 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
         collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
 
         generateCalendar();
-    });
-
-    generateJsonButton.addEventListener('click', function () {
-        const jsonFileName = 'binCollectionDates.json';
-        const jsonData = JSON.stringify(collectionDates, null, 2);
-        commitJsonFileToRepo(jsonFileName, jsonData);
     });
 
     function generateCollectionDates(startDate, repeatDays) {
@@ -180,22 +173,5 @@ document.addEventListener('DOMContentLoaded', function () {
             collectionDate.getDate() === date.getDate() &&
             collectionDate.getMonth() === date.getMonth() &&
             collectionDate.getFullYear() === date.getFullYear());
-    }
-
-    function commitJsonFileToRepo(fileName, jsonData) {
-        fetch('/commit-file', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ fileName, jsonData })
-        })
-        .then(response => response.text())
-        .then(data => {
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
     }
 });
