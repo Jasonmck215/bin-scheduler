@@ -4,22 +4,51 @@ document.addEventListener('DOMContentLoaded', function () {
     const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
     const blueStartDateInput = document.getElementById('blueStartDate');
     const blueRepeatDaysInput = document.getElementById('blueRepeatDays');
+    const purpleStartDateInput = document.getElementById('purpleStartDate');
+    const purpleRepeatDaysInput = document.getElementById('purpleRepeatDays');
+    const brownStartDateInput = document.getElementById('brownStartDate');
+    const brownRepeatDaysInput = document.getElementById('brownRepeatDays');
+    const greyStartDateInput = document.getElementById('greyStartDate');
+    const greyRepeatDaysInput = document.getElementById('greyRepeatDays');
     const calendarContainer = document.getElementById('calendar');
 
-    let greenCollectionDates = [];
-    let blueCollectionDates = [];
+    let collectionDates = {
+        green: [],
+        blue: [],
+        purple: [],
+        brown: [],
+        grey: []
+    };
 
     generateButton.addEventListener('click', function () {
+        // Green Bin
         const greenStartDate = new Date(greenStartDateInput.value);
         const greenRepeatDays = parseInt(greenRepeatDaysInput.value);
+
+        // Blue Bin
         const blueStartDate = new Date(blueStartDateInput.value);
         const blueRepeatDays = parseInt(blueRepeatDaysInput.value);
 
-        if (greenStartDate && greenRepeatDays && blueStartDate && blueRepeatDays) {
-            greenCollectionDates = generateCollectionDates(greenStartDate, greenRepeatDays);
-            blueCollectionDates = generateCollectionDates(blueStartDate, blueRepeatDays);
-            generateCalendar();
-        }
+        // Purple Bin
+        const purpleStartDate = new Date(purpleStartDateInput.value);
+        const purpleRepeatDays = parseInt(purpleRepeatDaysInput.value);
+
+        // Brown Bin
+        const brownStartDate = new Date(brownStartDateInput.value);
+        const brownRepeatDays = parseInt(brownRepeatDaysInput.value);
+
+        // Grey Bin
+        const greyStartDate = new Date(greyStartDateInput.value);
+        const greyRepeatDays = parseInt(greyRepeatDaysInput.value);
+
+        // Generate collection dates for all bins
+        collectionDates.green = generateCollectionDates(greenStartDate, greenRepeatDays);
+        collectionDates.blue = generateCollectionDates(blueStartDate, blueRepeatDays);
+        collectionDates.purple = generateCollectionDates(purpleStartDate, purpleRepeatDays);
+        collectionDates.brown = generateCollectionDates(brownStartDate, brownRepeatDays);
+        collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
+
+        generateCalendar();
     });
 
     function generateCollectionDates(startDate, repeatDays) {
@@ -102,19 +131,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const currentDate = new Date(year, month, currentDay);
 
-                // Check if it's a green bin collection day
-                const isGreenBin = isCollectionDate(currentDate, greenCollectionDates);
-                // Check if it's a blue bin collection day
-                const isBlueBin = isCollectionDate(currentDate, blueCollectionDates);
+                // Check if it's a collection day for any bin
+                const binClasses = getBinClasses(currentDate);
 
-                // Set colors based on whether it's a green or blue collection date
-                if (isGreenBin && isBlueBin) {
-                    td.classList.add('half-half'); // For combined color
-                } else if (isGreenBin) {
-                    td.classList.add('green');
-                } else if (isBlueBin) {
-                    td.classList.add('blue');
-                }
+                // Apply the colors for each bin
+                binClasses.forEach(binClass => {
+                    td.classList.add(binClass);
+                });
 
                 row.appendChild(td);
                 currentDay++;
@@ -130,8 +153,20 @@ document.addEventListener('DOMContentLoaded', function () {
         return monthContainer;
     }
 
+    function getBinClasses(date) {
+        const binClasses = [];
+
+        // Check each bin's collection dates
+        if (isCollectionDate(date, collectionDates.green)) binClasses.push('green');
+        if (isCollectionDate(date, collectionDates.blue)) binClasses.push('blue');
+        if (isCollectionDate(date, collectionDates.purple)) binClasses.push('purple');
+        if (isCollectionDate(date, collectionDates.brown)) binClasses.push('brown');
+        if (isCollectionDate(date, collectionDates.grey)) binClasses.push('grey');
+
+        return binClasses;
+    }
+
     function isCollectionDate(date, collectionDates) {
-        // Check if the date is one of the collection dates
         return collectionDates.some(collectionDate =>
             collectionDate.getDate() === date.getDate() &&
             collectionDate.getMonth() === date.getMonth() &&
