@@ -66,9 +66,12 @@ document.addEventListener('DOMContentLoaded', function () {
             const collectionDate = new Date(startDate);
             collectionDate.setDate(startDate.getDate() + (i * repeatDays));  // Add repeating days
 
-            // Add each repeated date within this year
+            // Only add the date if it doesn't already exist
             while (collectionDate.getFullYear() === startDate.getFullYear()) {
-                dates.push(new Date(collectionDate));
+                // Check if this date already exists in the dates array
+                if (!dates.some(existingDate => existingDate.toDateString() === collectionDate.toDateString())) {
+                    dates.push(new Date(collectionDate));
+                }
                 collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
             }
         }
