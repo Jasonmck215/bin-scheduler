@@ -1,17 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     console.log("Script loaded successfully!");
 
-    // Populate the Repeat Days dropdown (1 to 100 days)
-    let repeatDaysSelect = document.getElementById("repeatDays");
-    for (let i = 1; i <= 100; i++) {
-        let option = document.createElement("option");
-        option.value = i;
-        option.textContent = i + " Days";
-        repeatDaysSelect.appendChild(option);
-    }
-
-    repeatDaysSelect.value = "14";  // Set default to 14 days
-
     // Listen for the button click
     let button = document.getElementById("generateButton");
     button.addEventListener("click", generateSchedule);
@@ -27,8 +16,8 @@ function generateSchedule() {
     scheduleList.innerHTML = ""; // Clear previous results
     calendarDiv.innerHTML = "";  // Clear previous calendar
 
-    if (!startDateInput) {
-        alert("Please select a start date.");
+    if (!startDateInput || isNaN(repeatDays) || repeatDays <= 0) {
+        alert("Please enter a valid start date and repeat days.");
         return;
     }
 
