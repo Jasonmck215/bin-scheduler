@@ -150,11 +150,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const jsonContent = JSON.stringify(binCollection, null, 4);
         console.log(jsonContent);
 
-        // Send JSON to JSONBin (replace 'YOUR_JSONBIN_URL' with actual JSONBin URL)
-        fetch('YOUR_JSONBIN_URL', {
-            method: 'POST',
+        // Send JSON to JSONBin (replace 'YOUR_BIN_ID' and 'YOUR_API_KEY' with actual JSONBin details)
+        fetch('https://api.jsonbin.io/v3/b/67acf1f7acd3cb34a8df62e3', {
+            method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-Master-Key': '$2a$10$am33dKwbEV2.NEe9c6OVmOjvbbASzTBAPvNjkA76aipnMW7HUHoea'
             },
             body: jsonContent
         })
