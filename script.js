@@ -71,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function sendBinDataToJsonBin(binData) {
-        const apiKey = 'YOUR_JSONBIN_API_KEY'; // Replace with your actual jsonbin.io API key
-        const binId = 'YOUR_BIN_ID'; // Replace with your actual bin ID
+        const apiKey = '67acf5d5ad19ca34f800eafa'; // Replace with your actual jsonbin.io API key
+        const binId = '67acf1f7acd3cb34a8df62e3'; // Replace with your actual bin ID
 
         fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
             method: 'PUT',
