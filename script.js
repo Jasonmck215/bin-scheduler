@@ -60,22 +60,22 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function generateCollectionDates(startDate, repeatDays) {
-        const dates = [];
+        const dates = new Set(); // Using a Set to ensure uniqueness
         const numOfMonths = 12; // Generate dates for the next 12 months
-        for (let i = 0; i < numOfMonths; i++) {
-            const collectionDate = new Date(startDate);
-            collectionDate.setDate(startDate.getDate() + (i * repeatDays));  // Add repeating days
+        let currentDate = new Date(startDate); // Start with the initial date
 
-            // Only add the date if it doesn't already exist
+        for (let i = 0; i < numOfMonths; i++) {
+            const collectionDate = new Date(currentDate);
             while (collectionDate.getFullYear() === startDate.getFullYear()) {
-                // Check if this date already exists in the dates array
-                if (!dates.some(existingDate => existingDate.toDateString() === collectionDate.toDateString())) {
-                    dates.push(new Date(collectionDate));
-                }
-                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
+                // Add to the Set (Set will ensure unique dates)
+                dates.add(collectionDate.toDateString()); // Use toDateString for uniqueness
+                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Increment by repeatDays
             }
+            currentDate.setMonth(currentDate.getMonth() + 1); // Move to the next month
         }
-        return dates;
+
+        // Convert the Set back to an array of Dates
+        return Array.from(dates).map(date => new Date(date));
     }
 
     function formatCollectionDatesByDate(collectionDates) {
@@ -85,13 +85,13 @@ document.addEventListener('DOMContentLoaded', function () {
             collectionDates[binColor].forEach(date => {
                 const formattedDate = formatDate(date);
                 if (!dateBins[formattedDate]) {
-                    dateBins[formattedDate] = new Set();
+                    dateBins[formattedDate] = new Set(); // Set ensures no duplicate colors
                 }
-                dateBins[formattedDate].add(binColor); // Use Set to avoid duplicates
+                dateBins[formattedDate].add(binColor);
             });
         }
 
-        // Convert Set to Array for final output
+        // Convert Sets to Arrays
         for (const date in dateBins) {
             dateBins[date] = Array.from(dateBins[date]);
         }
@@ -216,8 +216,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     async function sendJsonToJsonbin(jsonData) {
-        const apiKey = 'YOUR_JSONBIN_API_KEY'; // Replace with your JSONbin API key
-        const binId = 'YOUR_JSONBIN_BIN_ID'; // Replace with your JSONbin bin ID
+         const apiKey = '$2a$10$am33dKwbEV2.NEe9c6OVmOjvbbASzTBAPvNjkA76aipnMW7HUHoea'; // Replace with your JSONbin API key
+        const binId = '67acf1f7acd3cb34a8df62e3'; // Replace with your JSONbin bin ID
         const endpoint = `https://api.jsonbin.io/v3/b/${binId}`; // JSONbin endpoint URL for updating a bin
 
         try {
