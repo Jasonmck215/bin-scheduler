@@ -82,38 +82,36 @@ td.green {
     color: white;
 }
 
-.input-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    gap: 10px;
+.month-container {
+    margin-bottom: 40px;
 }
 
-.input-container div {
-    flex: 1;
-    margin-right: 10px;
+.month-header {
+    text-align: center;
+    font-size: 1.2em;
+    margin-bottom: 10px;
 }
 
-.input-container input {
-    width: 150px;
-    box-sizing: border-box;
-    padding: 8px;
-}
-
-/* Mobile responsiveness */
 @media (max-width: 600px) {
     .input-container {
-        flex-direction: column; /* Stack the inputs vertically on smaller screens */
+        flex-direction: column;
         align-items: flex-start;
     }
 
     .input-container div {
-        width: 100%; /* Make each input take full width within its container */
+        width: 100%;
         margin-right: 0;
     }
 
     .input-container input {
-        width: 100%; /* Ensure input fields don't exceed the container's width */
+        width: 100%;
+    }
+
+    table {
+        font-size: 12px;
+    }
+
+    td {
+        padding: 5px;
     }
 }
