@@ -134,9 +134,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 // Get the bin collection classes for this date
                 const binClasses = getBinClasses(currentDate);
 
-                // If there are multiple bins, apply a split color style
+                // Apply a split color if there are multiple bins
                 if (binClasses.length > 1) {
-                    td.style.background = `linear-gradient(to right, ${binClasses.join(' 20%, ')} 20%)`;
+                    const gradient = `linear-gradient(to right, ${binClasses.join(' 50%, ')} 50%)`;
+                    td.style.background = gradient;
                 } else if (binClasses.length === 1) {
                     td.classList.add(binClasses[0]);
                 }
