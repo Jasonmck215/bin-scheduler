@@ -9,49 +9,40 @@
 <body>
     <div class="container">
         <h1>Bin Collection Scheduler</h1>
-        
-        <div class="input-row">
-            <label for="greenBinDate">Green Bin:</label>
-            <img src="greenBin.gif" alt="Green Bin" class="bin-icon">
-            <input type="date" id="greenBinDate">
-            <label for="greenBinRepeat">Repeat Every:</label>
-            <input type="number" id="greenBinRepeat" min="1">
-        </div>
-        
-        <div class="input-row">
-            <label for="blueBinDate">Blue Bin:</label>
-            <img src="blueBin.gif" alt="Blue Bin" class="bin-icon">
-            <input type="date" id="blueBinDate">
-            <label for="blueBinRepeat">Repeat Every:</label>
-            <input type="number" id="blueBinRepeat" min="1">
-        </div>
 
-        <div class="input-row">
-            <label for="purpleBinDate">Purple Bin:</label>
-            <img src="purpleBin.gif" alt="Purple Bin" class="bin-icon">
-            <input type="date" id="purpleBinDate">
-            <label for="purpleBinRepeat">Repeat Every:</label>
-            <input type="number" id="purpleBinRepeat" min="1">
-        </div>
+        <h2>Green Bin</h2>
+        <label for="greenStartDate">Select Start Date:</label>
+        <input type="date" id="greenStartDate">
+        <label for="greenRepeatDays">Repeat Every (Days):</label>
+        <input type="number" id="greenRepeatDays" value="14">
 
-        <div class="input-row">
-            <label for="brownBinDate">Brown Bin:</label>
-            <img src="brownBin.gif" alt="Brown Bin" class="bin-icon">
-            <input type="date" id="brownBinDate">
-            <label for="brownBinRepeat">Repeat Every:</label>
-            <input type="number" id="brownBinRepeat" min="1">
-        </div>
+        <h2>Blue Bin</h2>
+        <label for="blueStartDate">Select Start Date:</label>
+        <input type="date" id="blueStartDate">
+        <label for="blueRepeatDays">Repeat Every (Days):</label>
+        <input type="number" id="blueRepeatDays" value="14">
 
-        <div class="input-row">
-            <label for="greyBinDate">Grey Bin:</label>
-            <img src="greyBin.png" alt="Grey Bin" class="bin-icon">
-            <input type="date" id="greyBinDate">
-            <label for="greyBinRepeat">Repeat Every:</label>
-            <input type="number" id="greyBinRepeat" min="1">
-        </div>
+        <h2>Purple Bin</h2>
+        <label for="purpleStartDate">Select Start Date:</label>
+        <input type="date" id="purpleStartDate">
+        <label for="purpleRepeatDays">Repeat Every (Days):</label>
+        <input type="number" id="purpleRepeatDays" value="14">
 
-        <button onclick="generateSchedule()">Show Schedule</button>
-        <div class="month-container" id="calendarContainer"></div>
+        <h2>Brown Bin</h2>
+        <label for="brownStartDate">Select Start Date:</label>
+        <input type="date" id="brownStartDate">
+        <label for="brownRepeatDays">Repeat Every (Days):</label>
+        <input type="number" id="brownRepeatDays" value="14">
+
+        <h2>Grey Bin</h2>
+        <label for="greyStartDate">Select Start Date:</label>
+        <input type="date" id="greyStartDate">
+        <label for="greyRepeatDays">Repeat Every (Days):</label>
+        <input type="number" id="greyRepeatDays" value="14">
+
+        <button id="generateButton">Show Schedule</button>
+
+        <div id="calendar"></div>
     </div>
 
     <script src="script.js"></script>
