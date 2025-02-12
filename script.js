@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateButton = document.getElementById('generateButton');
+    const updateButton = document.getElementById('updateButton');
     const greenStartDateInput = document.getElementById('greenStartDate');
     const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
     const blueStartDateInput = document.getElementById('blueStartDate');
@@ -21,34 +22,19 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     generateButton.addEventListener('click', function () {
-        // Green Bin
-        const greenStartDate = new Date(greenStartDateInput.value);
-        const greenRepeatDays = parseInt(greenRepeatDaysInput.value);
-
-        // Blue Bin
-        const blueStartDate = new Date(blueStartDateInput.value);
-        const blueRepeatDays = parseInt(blueRepeatDaysInput.value);
-
-        // Purple Bin
-        const purpleStartDate = new Date(purpleStartDateInput.value);
-        const purpleRepeatDays = parseInt(purpleRepeatDaysInput.value);
-
-        // Brown Bin
-        const brownStartDate = new Date(brownStartDateInput.value);
-        const brownRepeatDays = parseInt(brownRepeatDaysInput.value);
-
-        // Grey Bin
-        const greyStartDate = new Date(greyStartDateInput.value);
-        const greyRepeatDays = parseInt(greyRepeatDaysInput.value);
-
         // Generate collection dates for all bins
-        collectionDates.green = generateCollectionDates(greenStartDate, greenRepeatDays);
-        collectionDates.blue = generateCollectionDates(blueStartDate, blueRepeatDays);
-        collectionDates.purple = generateCollectionDates(purpleStartDate, purpleRepeatDays);
-        collectionDates.brown = generateCollectionDates(brownStartDate, brownRepeatDays);
-        collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
+        collectionDates.green = generateCollectionDates(new Date(greenStartDateInput.value), parseInt(greenRepeatDaysInput.value));
+        collectionDates.blue = generateCollectionDates(new Date(blueStartDateInput.value), parseInt(blueRepeatDaysInput.value));
+        collectionDates.purple = generateCollectionDates(new Date(purpleStartDateInput.value), parseInt(purpleRepeatDaysInput.value));
+        collectionDates.brown = generateCollectionDates(new Date(brownStartDateInput.value), parseInt(brownRepeatDaysInput.value));
+        collectionDates.grey = generateCollectionDates(new Date(greyStartDateInput.value), parseInt(greyRepeatDaysInput.value));
 
         generateCalendar();
+    });
+
+    updateButton.addEventListener('click', function () {
+        const binData = generateBinData();
+        sendBinDataToJsonBin(binData);
     });
 
     function generateCollectionDates(startDate, repeatDays) {
@@ -65,6 +51,42 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         return dates;
+    }
+
+    function generateBinData() {
+        const binData = [];
+
+        for (const [color, dates] of Object.entries(collectionDates)) {
+            dates.forEach(date => {
+                binData.push({
+                    date: date.toISOString().split('T')[0], // Format date as YYYY-MM-DD
+                    bin: color
+                });
+            });
+        }
+
+        return binData;
+    }
+
+    function sendBinDataToJsonBin(binData) {
+        const apiKey = '$2a$10$n.tDk4AKThwbTEWyif/XG.HLzv4VctdAmDiQbkL2sXNaLtJIitWO.'; // Replace with your actual jsonbin.io API key
+        const binId = '67acf1f7acd3cb34a8df62e3 '; // Replace with your actual bin ID
+
+        fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Master-Key': apiKey
+            },
+            body: JSON.stringify(binData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Bin data updated successfully:', data);
+        })
+        .catch(error => {
+            console.error('Error updating bin data:', error);
+        });
     }
 
     function generateCalendar() {
