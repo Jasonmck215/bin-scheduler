@@ -24,7 +24,7 @@ label {
 }
 
 input, button {
-    width: auto;
+    width: 100%;
     padding: 10px;
     margin: 5px 10px 10px 0;
     border-radius: 5px;
@@ -89,6 +89,12 @@ td.green {
     margin-bottom: 20px;
 }
 
+.input-container div {
+    flex: 1; /* Ensures both input fields have equal width */
+    margin-right: 10px;
+}
+
 .input-container input {
-    width: 200px; /* Adjust the width of the inputs */
+    width: 100%;
+    box-sizing: border-box; /* Ensures inputs fit the parent container's width */
 }
