@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateButton = document.getElementById('generateButton');
-    const downloadButton = document.getElementById('downloadButton');
     const greenStartDateInput = document.getElementById('greenStartDate');
     const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
     const blueStartDateInput = document.getElementById('blueStartDate');
@@ -22,36 +21,90 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     generateButton.addEventListener('click', function () {
+        // Green Bin
+        const greenStartDate = new Date(greenStartDateInput.value);
+        const greenRepeatDays = parseInt(greenRepeatDaysInput.value);
+
+        // Blue Bin
+        const blueStartDate = new Date(blueStartDateInput.value);
+        const blueRepeatDays = parseInt(blueRepeatDaysInput.value);
+
+        // Purple Bin
+        const purpleStartDate = new Date(purpleStartDateInput.value);
+        const purpleRepeatDays = parseInt(purpleRepeatDaysInput.value);
+
+        // Brown Bin
+        const brownStartDate = new Date(brownStartDateInput.value);
+        const brownRepeatDays = parseInt(brownRepeatDaysInput.value);
+
+        // Grey Bin
+        const greyStartDate = new Date(greyStartDateInput.value);
+        const greyRepeatDays = parseInt(greyRepeatDaysInput.value);
+
         // Generate collection dates for all bins
-        collectionDates.green = generateCollectionDates(new Date(greenStartDateInput.value), parseInt(greenRepeatDaysInput.value));
-        collectionDates.blue = generateCollectionDates(new Date(blueStartDateInput.value), parseInt(blueRepeatDaysInput.value));
-        collectionDates.purple = generateCollectionDates(new Date(purpleStartDateInput.value), parseInt(purpleRepeatDaysInput.value));
-        collectionDates.brown = generateCollectionDates(new Date(brownStartDateInput.value), parseInt(brownRepeatDaysInput.value));
-        collectionDates.grey = generateCollectionDates(new Date(greyStartDateInput.value), parseInt(greyRepeatDaysInput.value));
+        collectionDates.green = generateCollectionDates(greenStartDate, greenRepeatDays);
+        collectionDates.blue = generateCollectionDates(blueStartDate, blueRepeatDays);
+        collectionDates.purple = generateCollectionDates(purpleStartDate, purpleRepeatDays);
+        collectionDates.brown = generateCollectionDates(brownStartDate, brownRepeatDays);
+        collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
 
         generateCalendar();
-    });
 
-    downloadButton.addEventListener('click', function () {
-        generateJSONFile();
+        // Convert collectionDates to formatted JSON grouped by date
+        const formattedCollectionDates = formatCollectionDatesByDate(collectionDates);
+        const jsonData = JSON.stringify(formattedCollectionDates);
+        console.log(jsonData); // For debugging purposes
+
+        // Send JSON data to JSONbin.io
+        sendJsonToJsonbin(jsonData);
     });
 
     function generateCollectionDates(startDate, repeatDays) {
-        const dates = [];
-        let collectionDate = new Date(startDate);
+        const dates = new Set(); // Using a Set to ensure uniqueness
+        const numOfMonths = 12; // Generate dates for the next 12 months
+        let currentDate = new Date(startDate); // Start with the initial date
 
-        // Keep adding collection dates for 12 months
-        while (collectionDate.getFullYear() === startDate.getFullYear() || 
-               collectionDate.getFullYear() === startDate.getFullYear() + 1) {
-            dates.push(new Date(collectionDate));
-            collectionDate.setDate(collectionDate.getDate() + repeatDays);
-
-            // Stop if we've moved more than 12 months ahead
-            if (collectionDate > new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDate())) {
-                break;
+        for (let i = 0; i < numOfMonths; i++) {
+            const collectionDate = new Date(currentDate);
+            while (collectionDate.getFullYear() === startDate.getFullYear()) {
+                // Add to the Set (Set will ensure unique dates)
+                dates.add(collectionDate.toDateString()); // Use toDateString for uniqueness
+                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Increment by repeatDays
             }
+            currentDate.setMonth(currentDate.getMonth() + 1); // Move to the next month
         }
-        return dates;
+
+        // Convert the Set back to an array of Dates
+        return Array.from(dates).map(date => new Date(date));
+    }
+
+    function formatCollectionDatesByDate(collectionDates) {
+        const dateBins = {};
+
+        for (const binColor in collectionDates) {
+            collectionDates[binColor].forEach(date => {
+                const formattedDate = formatDate(date);
+                if (!dateBins[formattedDate]) {
+                    dateBins[formattedDate] = new Set(); // Set ensures no duplicate colors
+                }
+                dateBins[formattedDate].add(binColor);
+            });
+        }
+
+        // Convert Sets to Arrays
+        for (const date in dateBins) {
+            dateBins[date] = Array.from(dateBins[date]);
+        }
+
+        return dateBins;
+    }
+
+    function formatDate(date) {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 
     function generateCalendar() {
@@ -59,8 +112,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
 
+        // Clear the previous calendar
         calendarContainer.innerHTML = '';
 
+        // Generate 12 months starting from the current month
         for (let monthOffset = 0; monthOffset < 12; monthOffset++) {
             const monthDate = new Date(currentYear, currentMonth + monthOffset, 1);
             const monthCalendar = createMonthCalendar(monthDate);
@@ -85,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const headerRow = document.createElement('tr');
         const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
+        // Create header row with days of the week
         daysOfWeek.forEach(day => {
             const th = document.createElement('th');
             th.textContent = day;
@@ -98,26 +154,41 @@ document.addEventListener('DOMContentLoaded', function () {
         let dayOfWeek = firstDayOfMonth.getDay();
         let currentDay = 1;
 
+        // Generate the calendar days
         while (currentDay <= lastDayOfMonth.getDate()) {
             const row = document.createElement('tr');
-            for (let i = 0; i < dayOfWeek; i++) row.appendChild(document.createElement('td'));
-            
+
+            // Fill empty spaces for days before the first day of the month
+            for (let i = 0; i < dayOfWeek; i++) {
+                const td = document.createElement('td');
+                row.appendChild(td);
+            }
+
+            // Add the actual days of the month
             while (dayOfWeek < 7 && currentDay <= lastDayOfMonth.getDate()) {
                 const td = document.createElement('td');
                 td.textContent = currentDay;
+
                 const currentDate = new Date(year, month, currentDay);
+
+                // Get the bin collection classes for this date
                 const binClasses = getBinClasses(currentDate);
+
+                // Apply a split color if there are multiple bins
                 if (binClasses.length > 0) {
                     const percentage = 100 / binClasses.length;
                     const gradient = `linear-gradient(to right, ${binClasses.map((color, index) => `${color} ${index * percentage}% ${(index + 1) * percentage}%`).join(', ')})`;
                     td.style.background = gradient;
                 }
+
                 row.appendChild(td);
                 currentDay++;
                 dayOfWeek++;
             }
+
+            // Add the row to the table
             calendarTable.appendChild(row);
-            dayOfWeek = 0;
+            dayOfWeek = 0; // Reset the day of the week for the next row
         }
 
         monthContainer.appendChild(calendarTable);
@@ -125,29 +196,48 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function getBinClasses(date) {
-        return Object.keys(collectionDates).filter(color => isCollectionDate(date, collectionDates[color]));
+        const binClasses = [];
+
+        // Check each bin's collection dates
+        if (isCollectionDate(date, collectionDates.green)) binClasses.push('green');
+        if (isCollectionDate(date, collectionDates.blue)) binClasses.push('blue');
+        if (isCollectionDate(date, collectionDates.purple)) binClasses.push('purple');
+        if (isCollectionDate(date, collectionDates.brown)) binClasses.push('brown');
+        if (isCollectionDate(date, collectionDates.grey)) binClasses.push('grey');
+
+        return binClasses;
     }
 
     function isCollectionDate(date, collectionDates) {
         return collectionDates.some(collectionDate =>
             collectionDate.getDate() === date.getDate() &&
             collectionDate.getMonth() === date.getMonth() &&
-            collectionDate.getFullYear() === date.getFullYear()
-        );
+            collectionDate.getFullYear() === date.getFullYear());
     }
 
-    function generateJSONFile() {
-        const binCollection = {};
+    async function sendJsonToJsonbin(jsonData) {
+         const apiKey = '$2a$10$am33dKwbEV2.NEe9c6OVmOjvbbASzTBAPvNjkA76aipnMW7HUHoea'; // Replace with your JSONbin API key
+        const binId = '67acf1f7acd3cb34a8df62e3'; // Replace with your JSONbin bin ID
+        const endpoint = `https://api.jsonbin.io/v3/b/${binId}`; // JSONbin endpoint URL for updating a bin
 
-        for (const color in collectionDates) {
-            collectionDates[color].forEach(date => {
-                const formattedDate = date.toISOString().split('T')[0];
-                if (!binCollection[formattedDate]) binCollection[formattedDate] = [];
-                binCollection[formattedDate].push(color);
+        try {
+            const response = await fetch(endpoint, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Master-Key': apiKey
+                },
+                body: jsonData
             });
-        }
 
-        const jsonContent = JSON.stringify(binCollection, null, 4);
-        console.log(jsonContent);
+            if (response.ok) {
+                const responseData = await response.json();
+                console.log('Data successfully sent to JSONbin.io:', responseData);
+            } else {
+                console.error('Failed to send data to JSONbin.io:', response.status, response.statusText);
+            }
+        } catch (error) {
+            console.error('Error sending data to JSONbin.io:', error);
+        }
     }
 });
