@@ -131,13 +131,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const currentDate = new Date(year, month, currentDay);
 
-                // Check if it's a collection day for any bin
+                // Get the bin collection classes for this date
                 const binClasses = getBinClasses(currentDate);
 
-                // Apply the colors for each bin
-                binClasses.forEach(binClass => {
-                    td.classList.add(binClass);
-                });
+                // If there are multiple bins, apply a split color style
+                if (binClasses.length > 1) {
+                    td.style.background = `linear-gradient(to right, ${binClasses.join(' 20%, ')} 20%)`;
+                } else if (binClasses.length === 1) {
+                    td.classList.add(binClasses[0]);
+                }
 
                 row.appendChild(td);
                 currentDay++;
