@@ -182,51 +182,20 @@ document.addEventListener('DOMContentLoaded', function () {
             collectionDate.getFullYear() === date.getFullYear());
     }
 
-    async function commitJsonFileToRepo(fileName, jsonData) {
-        const githubToken = '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'; // Replace with your GitHub token
-        const repoOwner = 'Jasonmck215';
-        const repoName = 'bin-scheduler';
-        const filePath = fileName;
-        const commitMessage = 'Add bin collection dates JSON file';
-
-        try {
-            // Get the current file SHA if the file already exists
-            const getFileResponse = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `token ${githubToken}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-
-            let fileSha = null;
-            if (getFileResponse.status === 200) {
-                const fileData = await getFileResponse.json();
-                fileSha = fileData.sha;
-            }
-
-            // Commit the new or updated file
-            const commitResponse = await fetch(`https://api.github.com/repos/${repoOwner}/${repoName}/contents/${filePath}`, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${githubToken}`,
-                    'Accept': 'application/vnd.github.v3+json'
-                },
-                body: JSON.stringify({
-                    message: commitMessage,
-                    content: btoa(jsonData),
-                    sha: fileSha
-                })
-            });
-
-            if (commitResponse.status === 201 || commitResponse.status === 200) {
-                console.log('File committed successfully');
-            } else {
-                const errorData = await commitResponse.json();
-                console.error('Error committing file:', errorData.message);
-            }
-        } catch (error) {
-            console.error('Error committing file:', error);
-        }
+    function commitJsonFileToRepo(fileName, jsonData) {
+        fetch('/commit-file', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ fileName, jsonData })
+        })
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
     }
 });
