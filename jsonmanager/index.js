@@ -1,8 +1,8 @@
 const axios = require('axios');
 
 // Replace with your jsonbin.io API URL and your API Key
-const BIN_ID = '<YOUR_BIN_ID>';
-const API_KEY = '<YOUR_API_KEY>';
+const BIN_ID = '67acf1f7acd3cb34a8df62e3';
+const API_KEY = '$2a$10$am33dKwbEV2.NEe9c6OVmOjvbbASzTBAPvNjkA76aipnMW7HUHoea';
 const jsonBinUrl = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
 // Function to read data from JSONbin.io
