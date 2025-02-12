@@ -87,14 +87,15 @@ td.green {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
+    gap: 20px; /* Space between the inputs */
 }
 
 .input-container div {
-    flex: 1; /* Ensures both input fields have equal width */
-    margin-right: 10px;
+    flex: 1;
 }
 
 .input-container input {
-    width: 100%;
-    box-sizing: border-box; /* Ensures inputs fit the parent container's width */
+    width: 180px; /* Smaller input width */
+    box-sizing: border-box;
+    padding: 8px;
 }
