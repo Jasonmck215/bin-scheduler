@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Bin Scheduler</title>
+    <title>Green Bin Collection Scheduler</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,15 +15,16 @@
 
         <label for="repeatDays">Repeat Every:</label>
         <select id="repeatDays">
-            <option value="7">7 Days</option>
-            <option value="14" selected>14 Days</option>
-            <option value="28">28 Days</option>
+            <!-- Options will be generated dynamically -->
         </select>
 
         <button id="generateButton">Show Schedule</button>
 
         <h2>Upcoming Collection Dates:</h2>
         <ul id="scheduleList"></ul>
+
+        <h2>Collection Calendar:</h2>
+        <div id="calendar"></div>
     </div>
 
     <script src="script.js" defer></script>
