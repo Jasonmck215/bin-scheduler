@@ -135,11 +135,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 const binClasses = getBinClasses(currentDate);
 
                 // Apply a split color if there are multiple bins
-                if (binClasses.length > 1) {
-                    const gradient = `linear-gradient(to right, ${binClasses.join(' 50%, ')} 50%)`;
+                if (binClasses.length > 0) {
+                    const percentage = 100 / binClasses.length;
+                    const gradient = `linear-gradient(to right, ${binClasses.map((color, index) => `${color} ${index * percentage}% ${(index + 1) * percentage}%`).join(', ')})`;
                     td.style.background = gradient;
-                } else if (binClasses.length === 1) {
-                    td.classList.add(binClasses[0]);
                 }
 
                 row.appendChild(td);
