@@ -186,19 +186,18 @@ document.addEventListener('DOMContentLoaded', function () {
         // Combine all collection dates with their bin color
         for (const binColor in collectionDates) {
             collectionDates[binColor].forEach(date => {
-                allDates.push({ date: date, bin: binColor });
+                allDates.push({ date: formatDate(date), bin: binColor });
             });
         }
 
-        // Sort dates by actual Date object (not string)
-        allDates.sort((a, b) => a.date - b.date);
+        // Sort dates by date
+        allDates.sort((a, b) => new Date(a.date.split('/').reverse().join('-')) - new Date(b.date.split('/').reverse().join('-')));
 
         const groupedDates = allDates.reduce((acc, { date, bin }) => {
-            const formattedDate = formatDate(date); // Format the date here for the final JSON output
-            if (!acc[formattedDate]) {
-                acc[formattedDate] = [];
+            if (!acc[date]) {
+                acc[date] = [];
             }
-            acc[formattedDate].push(bin);
+            acc[date].push(bin);
             return acc;
         }, {});
 
