@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const generateButton = document.getElementById('generateButton');
     const startDateInput = document.getElementById('startDate');
     const repeatDaysInput = document.getElementById('repeatDays');
-    const scheduleList = document.getElementById('scheduleList');
     const calendarContainer = document.getElementById('calendar');
 
     let collectionDates = [];
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (startDate && repeatDays) {
             collectionDates = generateCollectionDates(startDate, repeatDays);
-            updateSchedule();
             generateCalendar();
         }
     });
@@ -32,15 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         return dates;
-    }
-
-    function updateSchedule() {
-        scheduleList.innerHTML = '';
-        collectionDates.forEach(date => {
-            const li = document.createElement('li');
-            li.textContent = date.toLocaleDateString();
-            scheduleList.appendChild(li);
-        });
     }
 
     function generateCalendar() {
