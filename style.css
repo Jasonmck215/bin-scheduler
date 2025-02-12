@@ -51,17 +51,30 @@ th {
     background-color: #f2f2f2;
 }
 
-/* Color classes for bins */
+/* Color classes for bins with more vibrant colors */
 .green {
-    background-color: #a8d08d;
+    background-color: #388e3c; /* Darker, more vibrant green */
 }
 
 .blue {
-    background-color: #5bc0de;
+    background-color: #039be5; /* More vibrant blue */
 }
 
+.purple {
+    background-color: #8e24aa; /* Purple */
+}
+
+.brown {
+    background-color: #795548; /* Brown */
+}
+
+.grey {
+    background-color: #9e9e9e; /* Grey */
+}
+
+/* Half-half combination for multiple bins on the same day */
 .half-half {
-    background: linear-gradient(to right, #a8d08d 50%, #5bc0de 50%);
+    background: linear-gradient(to right, #388e3c 25%, #039be5 25%, #8e24aa 25%, #795548 25%, #9e9e9e 25%);
 }
 
 /* Input Styling */
