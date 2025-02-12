@@ -33,7 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     updateButton.addEventListener('click', function () {
+        console.log('Update button clicked');
         const binData = generateBinData();
+        console.log('Generated bin data:', JSON.stringify(binData, null, 2));
         sendBinDataToJsonBin(binData);
     });
 
@@ -69,8 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function sendBinDataToJsonBin(binData) {
-        const apiKey = '$2a$10$n.tDk4AKThwbTEWyif/XG.HLzv4VctdAmDiQbkL2sXNaLtJIitWO.'; // Replace with your actual jsonbin.io API key
-        const binId = '67acf1f7acd3cb34a8df62e3 '; // Replace with your actual bin ID
+        const apiKey = 'YOUR_JSONBIN_API_KEY'; // Replace with your actual jsonbin.io API key
+        const binId = 'YOUR_BIN_ID'; // Replace with your actual bin ID
 
         fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
             method: 'PUT',
@@ -80,12 +82,19 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             body: JSON.stringify(binData)
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             console.log('Bin data updated successfully:', data);
+            alert('Bin data updated successfully!');
         })
         .catch(error => {
             console.error('Error updating bin data:', error);
+            alert('Error updating bin data. Check console for details.');
         });
     }
 
