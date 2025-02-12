@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const startDateInput = document.getElementById('startDate');
     const repeatDaysInput = document.getElementById('repeatDays');
     const calendarContainer = document.getElementById('calendar');
+    const scheduleList = document.getElementById('scheduleList'); // This is hidden
 
     let collectionDates = [];
 
