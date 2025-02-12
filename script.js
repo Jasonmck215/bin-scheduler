@@ -68,7 +68,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Convert binData object to an array of objects and sort by date
         const sortedBinData = Object.entries(binData)
-            .map(([date, bins]) => ({ date, bins: bins.join(', ') }))
+            .map(([date, bins]) => ({
+                date,
+                bins: [...new Set(bins)].join(', ')  // Remove duplicates
+            }))
             .sort((a, b) => new Date(a.date) - new Date(b.date));
 
         return sortedBinData;
