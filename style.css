@@ -38,10 +38,10 @@ h1, h2 {
 .bin-selection {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
     justify-content: flex-start;
-    gap: 8px;
-    flex-wrap: wrap;  /* Allow items to wrap on smaller screens */
+    gap: 12px; /* Set spacing between elements */
+    flex-wrap: nowrap;  /* Ensure they stay horizontally aligned */
+    margin-bottom: 10px;
 }
 
 .bin-image {
@@ -52,12 +52,11 @@ h1, h2 {
 label {
     font-size: 0.9em;
     margin-bottom: 0;
-    margin-left: 5px;
 }
 
 input[type="date"],
 input[type="number"] {
-    width: 120px;
+    width: 100px; /* Adjust width */
     padding: 5px;
     font-size: 0.9em;
 }
@@ -161,14 +160,15 @@ td::after {
     }
 
     .bin-selection {
-        gap: 5px; /* Reduce gap for smaller screens */
+        gap: 8px; /* Reduce gap for smaller screens */
+        flex-wrap: nowrap;  /* Maintain horizontal layout */
     }
 
     .bin-selection label,
     .bin-selection input[type="date"],
     .bin-selection input[type="number"] {
-        font-size: 0.8em;
-        width: 100%; /* Allow inputs to take full width */
+        font-size: 0.9em;
+        width: auto; /* Adjust width for mobile screens */
     }
 
     .bin-image {
@@ -197,9 +197,8 @@ td::after {
 
     /* Bin selection layout for very small screens */
     .bin-selection {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
+        flex-wrap: wrap; /* Allow wrapping on very small screens */
+        gap: 8px;
     }
 
     .bin-image {
