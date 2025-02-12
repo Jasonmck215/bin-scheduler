@@ -151,11 +151,11 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log(jsonContent);
 
         // Send JSON to JSONBin (replace 'YOUR_BIN_ID' and 'YOUR_API_KEY' with actual JSONBin details)
-        fetch('https://api.jsonbin.io/v3/b/67acf1f7acd3cb34a8df62e3', {
+        fetch('https://api.jsonbin.io/v3/b/YOUR_BIN_ID', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
-                'X-Master-Key': '$2a$10$am33dKwbEV2.NEe9c6OVmOjvbbASzTBAPvNjkA76aipnMW7HUHoea'
+                'X-Master-Key': 'YOUR_API_KEY'
             },
             body: jsonContent
         })
