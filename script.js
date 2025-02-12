@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const sortedBinData = Object.entries(binData)
             .map(([date, bins]) => ({
                 date,
-                bins: Array.from(bins).join(', ')  // Remove duplicates
+                bins: Array.from(bins).join(', ')  // Convert Set to array and join
             }))
             .sort((a, b) => new Date(a.date) - new Date(b.date));
 
