@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateButton = document.getElementById('generateButton');
+    const generateJSONButton = document.getElementById('generateJSONButton');
     const greenStartDateInput = document.getElementById('greenStartDate');
     const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
     const blueStartDateInput = document.getElementById('blueStartDate');
@@ -21,90 +22,35 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     generateButton.addEventListener('click', function () {
-        // Green Bin
-        const greenStartDate = new Date(greenStartDateInput.value);
-        const greenRepeatDays = parseInt(greenRepeatDaysInput.value);
-
-        // Blue Bin
-        const blueStartDate = new Date(blueStartDateInput.value);
-        const blueRepeatDays = parseInt(blueRepeatDaysInput.value);
-
-        // Purple Bin
-        const purpleStartDate = new Date(purpleStartDateInput.value);
-        const purpleRepeatDays = parseInt(purpleRepeatDaysInput.value);
-
-        // Brown Bin
-        const brownStartDate = new Date(brownStartDateInput.value);
-        const brownRepeatDays = parseInt(brownRepeatDaysInput.value);
-
-        // Grey Bin
-        const greyStartDate = new Date(greyStartDateInput.value);
-        const greyRepeatDays = parseInt(greyRepeatDaysInput.value);
-
         // Generate collection dates for all bins
-        collectionDates.green = generateCollectionDates(greenStartDate, greenRepeatDays);
-        collectionDates.blue = generateCollectionDates(blueStartDate, blueRepeatDays);
-        collectionDates.purple = generateCollectionDates(purpleStartDate, purpleRepeatDays);
-        collectionDates.brown = generateCollectionDates(brownStartDate, brownRepeatDays);
-        collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
+        collectionDates.green = generateCollectionDates(new Date(greenStartDateInput.value), parseInt(greenRepeatDaysInput.value));
+        collectionDates.blue = generateCollectionDates(new Date(blueStartDateInput.value), parseInt(blueRepeatDaysInput.value));
+        collectionDates.purple = generateCollectionDates(new Date(purpleStartDateInput.value), parseInt(purpleRepeatDaysInput.value));
+        collectionDates.brown = generateCollectionDates(new Date(brownStartDateInput.value), parseInt(brownRepeatDaysInput.value));
+        collectionDates.grey = generateCollectionDates(new Date(greyStartDateInput.value), parseInt(greyRepeatDaysInput.value));
 
         generateCalendar();
+    });
 
-        // Convert collectionDates to formatted JSON grouped by date
-        const formattedCollectionDates = formatCollectionDatesByDate(collectionDates);
-        const jsonData = JSON.stringify(formattedCollectionDates);
-        console.log(jsonData); // For debugging purposes
-
-        // Send JSON data to JSONbin.io
-        sendJsonToJsonbin(jsonData);
+    generateJSONButton.addEventListener('click', function () {
+        const jsonData = JSON.stringify(collectionDates, null, 2);
+        console.log(jsonData);
     });
 
     function generateCollectionDates(startDate, repeatDays) {
-        const dates = new Set(); // Using a Set to ensure uniqueness
+        const dates = [];
         const numOfMonths = 12; // Generate dates for the next 12 months
-        let currentDate = new Date(startDate); // Start with the initial date
-
         for (let i = 0; i < numOfMonths; i++) {
-            const collectionDate = new Date(currentDate);
+            const collectionDate = new Date(startDate);
+            collectionDate.setDate(startDate.getDate() + (i * repeatDays));  // Add repeating days
+
+            // Add each repeated date within this year
             while (collectionDate.getFullYear() === startDate.getFullYear()) {
-                // Add to the Set (Set will ensure unique dates)
-                dates.add(collectionDate.toDateString()); // Use toDateString for uniqueness
-                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Increment by repeatDays
+                dates.push(new Date(collectionDate));
+                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
             }
-            currentDate.setMonth(currentDate.getMonth() + 1); // Move to the next month
         }
-
-        // Convert the Set back to an array of Dates
-        return Array.from(dates).map(date => new Date(date));
-    }
-
-    function formatCollectionDatesByDate(collectionDates) {
-        const dateBins = {};
-
-        for (const binColor in collectionDates) {
-            collectionDates[binColor].forEach(date => {
-                const formattedDate = formatDate(date);
-                if (!dateBins[formattedDate]) {
-                    dateBins[formattedDate] = new Set(); // Set ensures no duplicate colors
-                }
-                dateBins[formattedDate].add(binColor);
-            });
-        }
-
-        // Convert Sets to Arrays
-        for (const date in dateBins) {
-            dateBins[date] = Array.from(dateBins[date]);
-        }
-
-        return dateBins;
-    }
-
-    function formatDate(date) {
-        const d = new Date(date);
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+        return dates;
     }
 
     function generateCalendar() {
@@ -213,31 +159,5 @@ document.addEventListener('DOMContentLoaded', function () {
             collectionDate.getDate() === date.getDate() &&
             collectionDate.getMonth() === date.getMonth() &&
             collectionDate.getFullYear() === date.getFullYear());
-    }
-
-    async function sendJsonToJsonbin(jsonData) {
-         const apiKey = '$2a$10$am33dKwbEV2.NEe9c6OVmOjvbbASzTBAPvNjkA76aipnMW7HUHoea'; // Replace with your JSONbin API key
-        const binId = '67acf1f7acd3cb34a8df62e3'; // Replace with your JSONbin bin ID
-        const endpoint = `https://api.jsonbin.io/v3/b/${binId}`; // JSONbin endpoint URL for updating a bin
-
-        try {
-            const response = await fetch(endpoint, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Master-Key': apiKey
-                },
-                body: jsonData
-            });
-
-            if (response.ok) {
-                const responseData = await response.json();
-                console.log('Data successfully sent to JSONbin.io:', responseData);
-            } else {
-                console.error('Failed to send data to JSONbin.io:', response.status, response.statusText);
-            }
-        } catch (error) {
-            console.error('Error sending data to JSONbin.io:', error);
-        }
     }
 });
