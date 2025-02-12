@@ -1,5 +1,7 @@
+/* General styling */
 body {
     font-family: Arial, sans-serif;
+    margin: 0;
     padding: 20px;
     background-color: #f4f4f4;
 }
@@ -9,109 +11,79 @@ body {
     margin: 0 auto;
     background-color: #fff;
     padding: 20px;
+    border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
-    color: #2c3e50;
 }
 
-label {
+h2 {
+    margin-bottom: 10px;
+}
+
+/* Calendar Styling */
+.month-container {
+    margin-top: 30px;
+}
+
+.month-header {
+    text-align: center;
     font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-input, button {
-    width: 100%;
-    padding: 10px;
-    margin: 5px 10px 10px 0;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    display: inline-block;
-}
-
-button {
-    background-color: #2c3e50;
-    color: white;
-    cursor: pointer;
-    border: none;
-    margin-left: 10px;
-}
-
-button:hover {
-    background-color: #34495e;
-}
-
-ul {
-    list-style-type: none;
-    padding-left: 0;
-}
-
-li {
-    background-color: #ecf0f1;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
+    margin-bottom: 10px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
 th, td {
-    padding: 10px;
     text-align: center;
+    padding: 10px;
+    width: 14.28%;
+    height: 50px;
     border: 1px solid #ddd;
 }
 
 th {
-    background-color: #2c3e50;
+    background-color: #f2f2f2;
+}
+
+/* Color classes for bins */
+.green {
+    background-color: #a8d08d;
+}
+
+.blue {
+    background-color: #5bc0de;
+}
+
+.half-half {
+    background: linear-gradient(to right, #a8d08d 50%, #5bc0de 50%);
+}
+
+/* Input Styling */
+input[type="date"],
+input[type="number"] {
+    width: 150px;
+    padding: 8px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4caf50;
     color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
 }
 
-td {
-    background-color: #ecf0f1;
-}
-
-td.green {
-    background-color: green;
-    color: white;
-}
-
-.month-container {
-    margin-bottom: 40px;
-}
-
-.month-header {
-    text-align: center;
-    font-size: 1.2em;
-    margin-bottom: 10px;
-}
-
-@media (max-width: 600px) {
-    .input-container {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .input-container div {
-        width: 100%;
-        margin-right: 0;
-    }
-
-    .input-container input {
-        width: 100%;
-    }
-
-    table {
-        font-size: 12px;
-    }
-
-    td {
-        padding: 5px;
-    }
+button:hover {
+    background-color: #45a049;
 }
