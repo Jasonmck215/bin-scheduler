@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Green Bin Scheduler</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Green Bin Scheduler</h1>
+    <div class="form">
+      <label for="start-date">Start Date:</label>
+      <input type="date" id="start-date">
+
+      <label for="repeat-interval">Repeat Every (days):</label>
+      <select id="repeat-interval">
+        <option value="7">7 days</option>
+        <option value="14">14 days</option>
+        <option value="21">21 days</option>
+        <option value="28">28 days</option>
+      </select>
+
+      <button id="calculate">Calculate Dates</button>
+    </div>
+
+    <div class="calendar">
+      <h2>Upcoming Dates</h2>
+      <ul id="dates-list"></ul>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
