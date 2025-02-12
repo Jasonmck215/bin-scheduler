@@ -31,27 +31,29 @@ h1, h2 {
     text-align: center;
 }
 
-.month-container {
-    margin: 20px 0;
+.bin-selection {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
 }
 
-.month-header {
-    text-align: center;
-    font-size: 1.5em;
-    font-weight: bold;
-    padding: 10px;
+.bin-image {
+    width: 50px; /* Adjust image size */
+    height: auto;
+    margin-right: 10px;
 }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
+.bin-input {
+    display: flex;
+    flex-direction: column;
 }
 
-th, td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    vertical-align: middle;
-    text-align: center;
+input[type="date"],
+input[type="number"] {
+    width: 120px;
+    padding: 5px;
+    font-size: 1em;
+    margin-bottom: 10px;
 }
 
 /* Style for the bin color */
@@ -116,14 +118,6 @@ td::after {
 }
 
 /* Style for input fields and buttons */
-input[type="date"],
-input[type="number"] {
-    width: 120px;
-    padding: 5px;
-    font-size: 1em;
-    margin-right: 10px;
-}
-
 button {
     padding: 10px;
     font-size: 1em;
