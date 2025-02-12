@@ -49,6 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
         collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
 
         generateCalendar();
+        generateJSONFile();
     });
 
     function generateCollectionDates(startDate, repeatDays) {
@@ -173,5 +174,33 @@ document.addEventListener('DOMContentLoaded', function () {
             collectionDate.getDate() === date.getDate() &&
             collectionDate.getMonth() === date.getMonth() &&
             collectionDate.getFullYear() === date.getFullYear());
+    }
+
+    function generateJSONFile() {
+        const binCollection = {};
+
+        for (const color in collectionDates) {
+            collectionDates[color].forEach(date => {
+                const formattedDate = date.toLocaleDateString('en-GB'); // Format date as DD/MM/YYYY
+                if (!binCollection[formattedDate]) {
+                    binCollection[formattedDate] = [];
+                }
+                binCollection[formattedDate].push(color);
+            });
+        }
+
+        const formattedCollection = {};
+        for (const date in binCollection) {
+            formattedCollection[date] = binCollection[date].join(', ');
+        }
+
+        const jsonContent = JSON.stringify(formattedCollection, null, 4);
+        const blob = new Blob([jsonContent], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'bin-collection-schedule.json';
+        a.click();
+        URL.revokeObjectURL(url);
     }
 });
