@@ -199,12 +199,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const jsonContent = JSON.stringify(formattedCollection, null, 4);
-        const blob = new Blob([jsonContent], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'bin-collection-schedule.json';
-        a.click();
-        URL.revokeObjectURL(url);
+        console.log(jsonContent);
     }
 });
