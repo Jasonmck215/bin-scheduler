@@ -1,170 +1,28 @@
-/* Basic styles for the container and layout */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
+    height: 100vh;
     background-color: #f4f4f4;
-    min-height: 100vh;
 }
 
 .container {
-    width: 100%;
-    max-width: 800px;
-    margin: 20px;
+    width: 90%;
+    max-width: 1200px;
     padding: 20px;
     background-color: white;
-    border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
 }
 
-h1, h2 {
+h1 {
     text-align: center;
+    margin-bottom: 20px;
 }
 
-.month-container {
-    margin: 20px 0;
-}
-
-.month-header {
-    text-align: center;
-    font-size: 1.5em;
-    font-weight: bold;
-    padding: 10px;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th, td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    vertical-align: middle;
-    text-align: center;
-}
-
-/* Style for the bin colors */
-.green {
-    background-color: #00C851; /* Green */
-}
-
-.blue {
-    background-color: #0066CC; /* Blue */
-}
-
-.purple {
-    background-color: #9B30FF; /* Purple */
-}
-
-.brown {
-    background-color: #8B4513; /* Brown */
-}
-
-.grey {
-    background-color: #808080; /* Grey */
-}
-
-/* Ensure text remains on top of the color */
-td {
-    position: relative;
-    padding: 10px;
-    border: 1px solid #ddd;
-    vertical-align: middle;
-    text-align: center;
-    font-size: 1.2em; /* Increased font size for better visibility */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
-    color: black; /* Ensure text color is black for visibility */
-}
-
-/* Style for the bin colors when there are multiple */
-td span {
-    position: relative;
-    z-index: 2; /* Ensure text is on top of background */
-}
-
-td::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: inherit;
-    z-index: 1; /* Make sure the background is behind the text */
-}
-
-/* Adjust styling for cells with multiple colors (splits) */
-td {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    padding: 8px;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    td {
-        font-size: 14px;
-    }
-
-    .container {
-        width: 90%;
-    }
-}
-
-@media (max-width: 500px) {
-    table {
-        font-size: 12px;
-    }
-
-    .month-header {
-        font-size: 1.2em;
-    }
-
-    td {
-        padding: 6px;
-    }
-}
-
-/* Style for input fields and buttons */
-input[type="date"],
-input[type="number"] {
-    width: 120px;
-    padding: 5px;
-    font-size: 1em;
-    margin-right: 10px;
-}
-
-select {
-    width: 120px;
-    padding: 5px;
-    font-size: 1em;
-    margin-right: 10px;
-}
-
-button {
-    padding: 10px;
-    font-size: 1em;
-    cursor: pointer;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    margin-top: 10px;
-}
-
-button:hover {
-    background-color: #0056b3;
-}
-
-/* Extra styles for positioning input fields */
 .input-row {
     display: flex;
     align-items: center;
@@ -175,14 +33,88 @@ button:hover {
     margin-right: 10px;
 }
 
-.input-row input,
-.input-row select {
-    width: 40%;
+.input-row input {
+    padding: 8px;
+    margin-right: 10px;
+    width: 120px; /* Adjust the input width */
+    max-width: 200px;
 }
 
-/* Add some styles for the bin icons */
-.bin-icon {
-    width: 24px; /* Adjust the size of the icon */
-    height: auto;
-    margin-left: 8px;
+.input-row img {
+    width: 30px; /* Adjust image size */
+    margin-right: 10px;
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.month-container {
+    margin-top: 30px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+td {
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+td.green {
+    background-color: green;
+    color: white;
+}
+
+td.blue {
+    background-color: blue;
+    color: white;
+}
+
+td.purple {
+    background-color: purple;
+    color: white;
+}
+
+td.brown {
+    background-color: brown;
+    color: white;
+}
+
+td.grey {
+    background-color: grey;
+    color: white;
+}
+
+td.multi {
+    background-image: linear-gradient(45deg, green 50%, blue 50%);
+    color: white;
+}
+
+.month-header {
+    font-size: 20px;
+    margin: 10px 0;
+    font-weight: bold;
 }
