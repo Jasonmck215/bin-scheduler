@@ -1,13 +1,18 @@
 /* Basic styles for the container and layout */
-body {
-    font-family: Arial, sans-serif;
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    background-color: #f4f4f4;
-    min-height: 100vh;
 }
 
 .container {
@@ -18,6 +23,8 @@ body {
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 90vh; /* Ensure content stays within the viewport */
 }
 
 h1, h2 {
@@ -78,7 +85,6 @@ td {
     background-repeat: no-repeat;
 }
 
-/* Add this to prevent cutting off content */
 td {
     position: relative;
 }
@@ -95,39 +101,23 @@ td::after {
 
 /* Responsive design */
 @media (max-width: 768px) {
+    .container {
+        max-height: 90vh;
+        padding: 10px;
+    }
+
     td {
         font-size: 14px;
     }
 
-    .container {
-        width: 90%;
-    }
-}
-
-@media (max-width: 500px) {
-    table {
-        font-size: 12px;
-    }
-
     .month-header {
         font-size: 1.2em;
-    }
-
-    td {
-        padding: 6px;
     }
 }
 
 /* Style for input fields and buttons */
 input[type="date"],
 input[type="number"] {
-    width: 120px;
-    padding: 5px;
-    font-size: 1em;
-    margin-right: 10px;
-}
-
-select {
     width: 120px;
     padding: 5px;
     font-size: 1em;
@@ -147,20 +137,4 @@ button {
 
 button:hover {
     background-color: #0056b3;
-}
-
-/* Extra styles for positioning input fields */
-.input-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 15px;
-}
-
-.input-row label {
-    margin-right: 10px;
-}
-
-.input-row input,
-.input-row select {
-    width: 40%;
 }
