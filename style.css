@@ -167,7 +167,7 @@ button:hover {
 /* Extra styles for positioning input fields */
 .input-row {
     display: flex;
-    justify-content: space-between;
+    align-items: center;
     margin-bottom: 15px;
 }
 
@@ -178,4 +178,11 @@ button:hover {
 .input-row input,
 .input-row select {
     width: 40%;
+}
+
+/* Add some styles for the bin icons */
+.bin-icon {
+    width: 24px; /* Adjust the size of the icon */
+    height: auto;
+    margin-left: 8px;
 }
