@@ -47,7 +47,7 @@ th, td {
     text-align: center;
 }
 
-/* Style for the bin color */
+/* Style for the bin colors */
 .green {
     background-color: #00C851; /* Green */
 }
@@ -68,19 +68,24 @@ th, td {
     background-color: #808080; /* Grey */
 }
 
-/* Styles for when there are multiple bins on the same day */
+/* Ensure text remains on top of the color */
 td {
-    padding: 8px;
+    position: relative;
+    padding: 10px;
     border: 1px solid #ddd;
     vertical-align: middle;
     text-align: center;
+    font-size: 1.2em; /* Increased font size for better visibility */
     background-size: cover;
     background-repeat: no-repeat;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent background */
+    color: black; /* Ensure text color is black for visibility */
 }
 
-/* Add this to prevent cutting off content */
-td {
+/* Style for the bin colors when there are multiple */
+td span {
     position: relative;
+    z-index: 2; /* Ensure text is on top of background */
 }
 
 td::after {
@@ -91,6 +96,16 @@ td::after {
     right: 0;
     bottom: 0;
     background: inherit;
+    z-index: 1; /* Make sure the background is behind the text */
+}
+
+/* Adjust styling for cells with multiple colors (splits) */
+td {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 8px;
 }
 
 /* Responsive design */
