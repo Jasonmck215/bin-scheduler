@@ -154,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log(jsonContent);
 
         // Send JSON to JSONBin (replace 'YOUR_BIN_ID' and 'YOUR_API_KEY' with actual JSONBin details)
-        fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
+        fetch(`https://api.jsonbin.io/v3/b/67acf1f7acd3cb34a8df62e3`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
