@@ -41,17 +41,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateCollectionDates(startDate, repeatDays) {
         const dates = [];
-        const numOfMonths = 12; // Generate dates for the next 12 months
-        for (let i = 0; i < numOfMonths; i++) {
-            const collectionDate = new Date(startDate);
-            collectionDate.setDate(startDate.getDate() + (i * repeatDays));  // Add repeating days
+        const numOfDays = 365; // Generate dates for the next 365 days
+        const collectionDate = new Date(startDate);
 
-            // Add each repeated date within this year
-            while (collectionDate.getFullYear() === startDate.getFullYear()) {
-                dates.push(new Date(collectionDate));
-                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
-            }
+        while (collectionDate <= new Date(startDate.getFullYear() + 1, startDate.getMonth(), startDate.getDate())) {
+            dates.push(new Date(collectionDate));
+            collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
         }
+
         return dates;
     }
 
@@ -64,7 +61,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!binData[dateString]) {
                     binData[dateString] = [];
                 }
-                binData[dateString].push(color);
+                if (!binData[dateString].includes(color)) {
+                    binData[dateString].push(color);
+                }
             });
         }
 
