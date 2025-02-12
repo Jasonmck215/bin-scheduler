@@ -39,9 +39,9 @@ h1, h2 {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 12px; /* Set spacing between elements */
+    gap: 8px; /* Reduce the gap between elements */
     flex-wrap: nowrap;  /* Ensure they stay horizontally aligned */
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .bin-image {
@@ -56,9 +56,10 @@ label {
 
 input[type="date"],
 input[type="number"] {
-    width: 100px; /* Adjust width */
+    width: 80px; /* Narrower width for inputs */
     padding: 5px;
-    font-size: 0.9em;
+    font-size: 0.8em; /* Smaller font size */
+    margin-right: 10px;
 }
 
 /* Style for the button */
@@ -124,16 +125,6 @@ th, td {
     background-color: #808080; /* Grey */
 }
 
-/* Styles for when there are multiple bins on the same day */
-td {
-    padding: 6px;
-    border: 1px solid #ddd;
-    vertical-align: middle;
-    text-align: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
 /* Add this to prevent cutting off content */
 td {
     position: relative;
@@ -160,15 +151,15 @@ td::after {
     }
 
     .bin-selection {
-        gap: 8px; /* Reduce gap for smaller screens */
+        gap: 6px; /* Further reduce the gap for smaller screens */
         flex-wrap: nowrap;  /* Maintain horizontal layout */
     }
 
     .bin-selection label,
     .bin-selection input[type="date"],
     .bin-selection input[type="number"] {
-        font-size: 0.9em;
-        width: auto; /* Adjust width for mobile screens */
+        font-size: 0.8em; /* Smaller font size */
+        width: 70px; /* Reduce input width */
     }
 
     .bin-image {
@@ -197,8 +188,8 @@ td::after {
 
     /* Bin selection layout for very small screens */
     .bin-selection {
-        flex-wrap: wrap; /* Allow wrapping on very small screens */
-        gap: 8px;
+        flex-wrap: nowrap; /* Force horizontal layout */
+        gap: 6px;
     }
 
     .bin-image {
@@ -206,12 +197,12 @@ td::after {
     }
 
     label {
-        font-size: 0.8em;
+        font-size: 0.7em; /* Even smaller font size */
     }
 
     input[type="date"],
     input[type="number"] {
-        width: 100%; /* Allow inputs to stretch across full width */
+        width: 65px; /* Make inputs narrower for small screens */
     }
 }
 
