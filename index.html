@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Bin Scheduler</title>
+    <title>Bin Collection Scheduler</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Green Bin Collection Scheduler</h1>
+        <h1>Bin Collection Scheduler</h1>
         
-        <label for="startDate">Select Start Date:</label>
-        <input type="date" id="startDate">
+        <!-- Green Bin Section -->
+        <div>
+            <h2>Green Bin</h2>
+            <label for="greenStartDate">Select Start Date:</label>
+            <input type="date" id="greenStartDate">
 
-        <label for="repeatDays">Repeat Every (in days):</label>
-        <input type="number" id="repeatDays" placeholder="e.g. 7">
+            <label for="greenRepeatDays">Repeat Every (in days):</label>
+            <input type="number" id="greenRepeatDays" placeholder="e.g. 7">
+        </div>
+
+        <!-- Blue Bin Section -->
+        <div>
+            <h2>Blue Bin</h2>
+            <label for="blueStartDate">Select Start Date:</label>
+            <input type="date" id="blueStartDate">
+
+            <label for="blueRepeatDays">Repeat Every (in days):</label>
+            <input type="number" id="blueRepeatDays" placeholder="e.g. 7">
+        </div>
 
         <button id="generateButton">Show Schedule</button>
-
-        <!-- Hidden Upcoming Collection Dates Section -->
-        <ul id="scheduleList" style="display:none;"></ul> <!-- This section is now hidden -->
 
         <div id="calendar"></div> <!-- Calendar will be rendered here -->
     </div>
