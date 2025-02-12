@@ -141,17 +141,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         for (const color in collectionDates) {
             collectionDates[color].forEach(date => {
-                const formattedDate = date.toLocaleDateString('en-GB');
-                if (!binCollection[formattedDate]) binCollection[formattedDate] = new Set();
-                binCollection[formattedDate].add(color);
+                const formattedDate = date.toISOString().split('T')[0];
+                if (!binCollection[formattedDate]) binCollection[formattedDate] = [];
+                binCollection[formattedDate].push(color);
             });
         }
 
-        const formattedCollection = Object.fromEntries(
-            Object.entries(binCollection).map(([date, bins]) => [date, [...bins].join(', ')])
-        );
-
-        const jsonContent = JSON.stringify(formattedCollection, null, 4);
+        const jsonContent = JSON.stringify(binCollection, null, 4);
         console.log(jsonContent);
     }
 });
