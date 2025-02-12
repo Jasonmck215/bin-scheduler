@@ -187,15 +187,15 @@ document.addEventListener('DOMContentLoaded', function () {
             collectionDates[color].forEach(date => {
                 const formattedDate = date.toLocaleDateString('en-GB'); // Format date as DD/MM/YYYY
                 if (!binCollection[formattedDate]) {
-                    binCollection[formattedDate] = [];
+                    binCollection[formattedDate] = new Set();
                 }
-                binCollection[formattedDate].push(color);
+                binCollection[formattedDate].add(color);
             });
         }
 
         const formattedCollection = {};
         for (const date in binCollection) {
-            formattedCollection[date] = binCollection[date].join(', ');
+            formattedCollection[date] = Array.from(binCollection[date]).join(', ');
         }
 
         const jsonContent = JSON.stringify(formattedCollection, null, 4);
