@@ -1,18 +1,23 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateButton = document.getElementById('generateButton');
-    const startDateInput = document.getElementById('startDate');
-    const repeatDaysInput = document.getElementById('repeatDays');
+    const greenStartDateInput = document.getElementById('greenStartDate');
+    const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
+    const blueStartDateInput = document.getElementById('blueStartDate');
+    const blueRepeatDaysInput = document.getElementById('blueRepeatDays');
     const calendarContainer = document.getElementById('calendar');
-    const scheduleList = document.getElementById('scheduleList'); // This is hidden
 
-    let collectionDates = [];
+    let greenCollectionDates = [];
+    let blueCollectionDates = [];
 
     generateButton.addEventListener('click', function () {
-        const startDate = new Date(startDateInput.value);
-        const repeatDays = parseInt(repeatDaysInput.value);
+        const greenStartDate = new Date(greenStartDateInput.value);
+        const greenRepeatDays = parseInt(greenRepeatDaysInput.value);
+        const blueStartDate = new Date(blueStartDateInput.value);
+        const blueRepeatDays = parseInt(blueRepeatDaysInput.value);
 
-        if (startDate && repeatDays) {
-            collectionDates = generateCollectionDates(startDate, repeatDays);
+        if (greenStartDate && greenRepeatDays && blueStartDate && blueRepeatDays) {
+            greenCollectionDates = generateCollectionDates(greenStartDate, greenRepeatDays);
+            blueCollectionDates = generateCollectionDates(blueStartDate, blueRepeatDays);
             generateCalendar();
         }
     });
@@ -96,8 +101,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 td.textContent = currentDay;
 
                 const currentDate = new Date(year, month, currentDay);
-                if (isCollectionDate(currentDate)) {
+
+                // Check if it's a green bin collection day
+                const isGreenBin = isCollectionDate(currentDate, greenCollectionDates);
+                // Check if it's a blue bin collection day
+                const isBlueBin = isCollectionDate(currentDate, blueCollectionDates);
+
+                // Set colors based on whether it's a green or blue collection date
+                if (isGreenBin && isBlueBin) {
+                    td.classList.add('half-half'); // For combined color
+                } else if (isGreenBin) {
                     td.classList.add('green');
+                } else if (isBlueBin) {
+                    td.classList.add('blue');
                 }
 
                 row.appendChild(td);
@@ -114,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return monthContainer;
     }
 
-    function isCollectionDate(date) {
+    function isCollectionDate(date, collectionDates) {
         // Check if the date is one of the collection dates
         return collectionDates.some(collectionDate =>
             collectionDate.getDate() === date.getDate() &&
