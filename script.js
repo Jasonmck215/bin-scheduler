@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
     const generateButton = document.getElementById('generateButton');
+    const downloadButton = document.getElementById('downloadButton');
     const greenStartDateInput = document.getElementById('greenStartDate');
     const greenRepeatDaysInput = document.getElementById('greenRepeatDays');
     const blueStartDateInput = document.getElementById('blueStartDate');
@@ -49,6 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
         collectionDates.grey = generateCollectionDates(greyStartDate, greyRepeatDays);
 
         generateCalendar();
+    });
+
+    downloadButton.addEventListener('click', function () {
         generateJSONFile();
     });
 
