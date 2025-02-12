@@ -87,7 +87,7 @@ td.green {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
-    gap: 10px; /* Reduced gap between inputs */
+    gap: 10px;
 }
 
 .input-container div {
@@ -96,7 +96,24 @@ td.green {
 }
 
 .input-container input {
-    width: 150px; /* Adjusted width to make the inputs smaller */
+    width: 150px;
     box-sizing: border-box;
     padding: 8px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    .input-container {
+        flex-direction: column; /* Stack the inputs vertically on smaller screens */
+        align-items: flex-start;
+    }
+
+    .input-container div {
+        width: 100%; /* Make each input take full width within its container */
+        margin-right: 0;
+    }
+
+    .input-container input {
+        width: 100%; /* Ensure input fields don't exceed the container's width */
+    }
 }
