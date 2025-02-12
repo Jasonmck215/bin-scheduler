@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const scheduleList = document.getElementById('scheduleList');
     const calendarContainer = document.getElementById('calendar');
 
-    // Store the collection dates
     let collectionDates = [];
 
     generateButton.addEventListener('click', function () {
@@ -21,10 +20,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function generateCollectionDates(startDate, repeatDays) {
         const dates = [];
-        for (let i = 0; i < 12; i++) {  // Generate collection dates for 12 months
+        const numOfMonths = 12; // Generate dates for the next 12 months
+        for (let i = 0; i < numOfMonths; i++) {
             const collectionDate = new Date(startDate);
-            collectionDate.setDate(startDate.getDate() + (i * repeatDays));
-            dates.push(collectionDate);
+            collectionDate.setDate(startDate.getDate() + (i * repeatDays));  // Add repeating days
+
+            // Add each repeated date within this year
+            while (collectionDate.getFullYear() === startDate.getFullYear()) {
+                dates.push(new Date(collectionDate));
+                collectionDate.setDate(collectionDate.getDate() + repeatDays); // Add repeat interval
+            }
         }
         return dates;
     }
@@ -46,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Clear the previous calendar
         calendarContainer.innerHTML = '';
 
-        // Generate 12 months
+        // Generate 12 months starting from the current month
         for (let monthOffset = 0; monthOffset < 12; monthOffset++) {
             const monthDate = new Date(currentYear, currentMonth + monthOffset, 1);
             const monthCalendar = createMonthCalendar(monthDate);
@@ -85,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let dayOfWeek = firstDayOfMonth.getDay();
         let currentDay = 1;
 
+        // Generate the calendar days
         while (currentDay <= lastDayOfMonth.getDate()) {
             const row = document.createElement('tr');
 
@@ -120,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function isCollectionDate(date) {
         // Check if the date is one of the collection dates
-        return collectionDates.some(collectionDate => 
+        return collectionDates.some(collectionDate =>
             collectionDate.getDate() === date.getDate() &&
             collectionDate.getMonth() === date.getMonth() &&
             collectionDate.getFullYear() === date.getFullYear());
